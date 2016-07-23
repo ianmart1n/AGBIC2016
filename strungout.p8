@@ -79,6 +79,8 @@ function _init()
  
  --head and body
  cat=entity(0,0,7)
+ cat.v_a=0
+ cat.v_p=0
  cat.points={
   {11,-11},
     {-11,-11},
@@ -249,19 +251,17 @@ function _init()
  
  local game={}
  game.u=function()
-  if btn(0) then cat.p[1] -= 2 end
-  if btn(1) then cat.p[1] += 2 end
-  if btn(2) then cat.p[2] -= 2 end
-  if btn(3) then cat.p[2] += 2 end
-  if btn(4) then
-   --cat.a -= 0.01
-   cat.s -= 0.01
-  end
-  if btn(5) then
-   --cat.a += 0.01
-   cat.s += 0.01
-  end
- 
+  if btn(0) then cat.v_a += 0.01 end
+  if btn(1) then cat.v_a -= 0.01 end
+  if btn(2) then cat.v_p -= 0.75 end
+  if btn(3) then cat.v_p += 0.25 end
+  cat.v_a *= 0.7
+  cat.v_p *= 0.9
+  
+  cat.a += cat.v_a
+  cat.p[1] += cos(cat.a-0.25)*cat.v_p
+  cat.p[2] += sin(cat.a-0.25)*cat.v_p
+  
   cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
   cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
  
