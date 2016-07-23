@@ -11,6 +11,7 @@ function entity(_x,_y,_c)
  e.a=0
  e.s=1
  e.c=_c
+ e.children={}
  return e
 end
 
@@ -54,8 +55,8 @@ function _init()
   add(cam.a_stack,cam.a)
   add(cam.s_stack,cam.s)
   local p = v_mul(rotate(_p.p,cam.a),cam.s)
-  cam.a+=_p.a
   cam.s*=_p.s
+  cam.a+=_p.a
   add(cam.p_stack,cam.sp)
   cam.sp=v_sub(cam.sp,p)
   camera(cam.p[1]+cam.sp[1],cam.p[2]+cam.sp[2])
@@ -71,13 +72,14 @@ function _init()
   cam.sp=p
   camera(cam.p[1]+cam.sp[1],cam.p[2]+cam.sp[2])
   del(cam.a_stack,a)
+  del(cam.s_stack,s)
   del(cam.p_stack,p)
   cam.n_stack-=1
  end
  
  --head and body
- p=entity(0,0,7)
- p.points={
+ cat=entity(0,0,7)
+ cat.points={
   {11,-11},
     {-11,-11},
     {-23,-20},
@@ -93,9 +95,10 @@ function _init()
     {23,-20},
   {11,-11}
  }
+ cat.s=0.5
  
  --left arm
- p2=entity(-10,21,7)
+ local p2=entity(-10,21,7)
  p2.points={
   {0,0},
   {-5,7},
@@ -103,7 +106,7 @@ function _init()
  }
  
  --right arm
- p3=entity(10,21,7)
+ local p3=entity(10,21,7)
  p3.points={
   {0,0},
   {5,7},
@@ -111,21 +114,21 @@ function _init()
  }
  
  --left earline
- p4=entity(-12,-11,7)
+ local p4=entity(-12,-11,7)
  p4.points={
   {0,0},
   {-11,7}
  }
  
  --right earline
- p5=entity(12,-11,7)
+ local p5=entity(12,-11,7)
  p5.points={
   {0,0},
   {11,7}
  }
  
  --left eye
- p6=entity(-13,0,7)
+ local p6=entity(-13,0,7)
  p6.points={
   {0,0},
   {-4,4},
@@ -137,14 +140,14 @@ function _init()
  }
  
  --left pupil
- p7=entity(-10,0,7)
+ local p7=entity(-10,0,7)
  p7.points={
   {0,0},
   {0,8}
  }
  
  --right eye
- p8=entity(7,0,7)
+ local p8=entity(7,0,7)
  p8.points={
   {0,0},
   {-4,4},
@@ -156,7 +159,7 @@ function _init()
  }
  
  --right pupil
- p9=entity(10,0,7)
+ local p9=entity(10,0,7)
  p9.points={
   {0,0},
   {0,8}
@@ -164,7 +167,7 @@ function _init()
  
  
  --mouth
- p10=entity(-3,16,7)
+ local p10=entity(-3,16,7)
  p10.points={
   {0,0},
   {3,-3},
@@ -172,7 +175,7 @@ function _init()
  }
  
  --left leg
- p11=entity(-7,37,7)
+ local p11=entity(-7,37,7)
  p11.points={
   {0,0},
   {-5,7},
@@ -180,7 +183,7 @@ function _init()
  }
  
  --right leg
- p12=entity(7,37,7)
+ local p12=entity(7,37,7)
  p12.points={
   {0,0},
   {5,7},
@@ -188,33 +191,32 @@ function _init()
  }
  
  --tail
- p13=entity(0,43,7)
+ local p13=entity(0,43,7)
  p13.points={
   {0,0},
   {0,18}
  }
  
  --headline
- p14=entity(-7,21,7)
+ local p14=entity(-7,21,7)
  p14.points={
   {0,0},
   {14,0}
  }
  
- p.children={}
- add(p.children,p2)
- add(p.children,p3)
- add(p.children,p4)
- add(p.children,p5)
- add(p.children,p6)
- add(p.children,p7)
- add(p.children,p8)
- add(p.children,p9)
- add(p.children,p10)
- add(p.children,p11)
- add(p.children,p12)
- add(p.children,p13)
- add(p.children,p14)
+ add(cat.children,p2)
+ add(cat.children,p3)
+ add(cat.children,p4)
+ add(cat.children,p5)
+ add(cat.children,p6)
+ add(cat.children,p7)
+ add(cat.children,p8)
+ add(cat.children,p9)
+ add(cat.children,p10)
+ add(cat.children,p11)
+ add(cat.children,p12)
+ add(cat.children,p13)
+ add(cat.children,p14)
  
  palette={}
  palette.c=1
@@ -247,21 +249,22 @@ function _init()
  
  local game={}
  game.u=function()
-  if btn(0) then p.p[1] -= 1 end
-  if btn(1) then p.p[1] += 1 end
-  if btn(2) then p.p[2] -= 1 end
-  if btn(3) then p.p[2] += 1 end
+  if btn(0) then cat.p[1] -= 2 end
+  if btn(1) then cat.p[1] += 2 end
+  if btn(2) then cat.p[2] -= 2 end
+  if btn(3) then cat.p[2] += 2 end
   if btn(4) then
-   p.a -= 0.01
-   --p.s -= 0.01
+   --cat.a -= 0.01
+   cat.s -= 0.01
   end
   if btn(5) then
-   p.a += 0.01
-   --p.s += 0.01
+   --cat.a += 0.01
+   cat.s += 0.01
   end
  
-  cam.p[1] = lerp(cam.p[1], p.p[1], 0.1)
-  cam.p[2] = lerp(cam.p[2], p.p[2], 0.1)
+  cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
+  cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
+ 
  end
  
  game.d=function()
@@ -271,22 +274,22 @@ function _init()
   color(7)
   o=entity(64,64)
   cam.push(o)
-  draw_vector(p)
+  draw_vector(cat)
   cam.pop()
- 
+  
   camera(0,0)
   print(cam.p[1],1,1)
   print(cam.p[2],50,1)
   print(cam.sp[1],1,10)
   print(cam.sp[2],50,10)
   print(#cam.p_stack,100,1)
-  print(p.p[1],1,20)
-  print(p.p[2],50,20)
+  print(cat.p[1],1,20)
+  print(cat.p[2],50,20)
  end
  
  scenes["menu"]=menu
  scenes["game"]=game
- scenes.current = "menu"
+ scenes.current = "game"
 end
 
 function _update()
