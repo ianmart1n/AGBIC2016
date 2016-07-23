@@ -1,13 +1,15 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
-function entity(_x,_y)
+
+function entity(_x,_y,_c)
  local e={}
  e.p={}
  e.p[1]=_x
  e.p[2]=_y
  e.a=0
  e.s=1
+ e.c=_c
  return e
 end
 
@@ -72,7 +74,7 @@ function _init()
   cam.n_stack-=1
  end
  
- p=entity(0,0)
+ p=entity(0,0,7)
  p.points={
   {-5,-5},
   {5,-5},
@@ -82,7 +84,7 @@ function _init()
   {5,5}
  }
  
- p2=entity(9,9)
+ p2=entity(9,9,8)
  p2.points={
   {-5,-5},
   {5,-5},
@@ -157,6 +159,7 @@ end
 function draw_vector(_p)
  cam.push(_p)
  
+ color(_p.c)
  p1 = v_mul(rotate(_p.points[1],cam.a),cam.s)
  for i=2,#_p.points do
   p2 = v_mul(rotate(_p.points[i],cam.a),cam.s)
