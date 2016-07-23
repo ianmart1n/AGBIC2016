@@ -93,7 +93,7 @@ function _init()
   {11,-11}
  }
  
- p2=entity(9,9,8)
+ p2=entity(9,9,1)
  p2.points={
   {-5,-5},
   {5,-5},
@@ -106,14 +106,31 @@ function _init()
  p.children={}
  add(p.children,p2)
  
+ palette={}
+ palette.c=1
+ palette.a={}
+ add(palette.a,{0,1,7,12,"earth blue"})
+ add(palette.a,{0,2,6,8,"mars red"})
+ palette.set=function(v)
+  palette.c=(v-1)%#palette.a+1
+  for i=1,4 do
+   pal(palette.a[1][i],palette.a[palette.c][i])
+  end
+ end
  local menu={}
  menu.u=function()
-  if btn(4) then scenes.current="game" end
+  if btn(4) and btn(5) then scenes.current="game" end
+  if btnp(0) then palette.set(palette.c+1) end
+  if btnp(1) then palette.set(palette.c-1) end
  end
  menu.d=function()
   cls()
   camera(0,flr(sin(time()/10)*5+0.5))
   sspr(96,0,30,30,64-15,64-15)
+  color(12)
+  print("\143 \143 in heaven's high \143 \143",10,80)
+  print("press z+x to start",28,90)
+  print("‹ "..palette.a[palette.c][5].." ‘",52-#palette.a[palette.c][5]/2*4,100)
  end
  
  local game={}
