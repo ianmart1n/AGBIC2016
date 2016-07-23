@@ -15,6 +15,12 @@ function entity(_x,_y,_c)
  return e
 end
 
+function vectorize(_e)
+ _e.points={}
+ _e.draw=draw_vector
+ return _e
+end
+
 function lerp(_from,_to,_t)
  return _from+_t*(_to-_from)
 end
@@ -77,11 +83,44 @@ function _init()
   cam.n_stack-=1
  end
  
- --head and body
  cat=entity(0,0,7)
  cat.v_a=0
  cat.v_p=0
- cat.points={
+ cat.draw=function(_c)
+  cam.push(_c)
+  
+  --rings
+  color(0)
+  circfill(0,0,30)
+  color(12)
+  circfill(0,0,20)
+  for a=0.1,1,0.1 do
+   local b=a+time()/10
+   line(
+   25*cos(b),25*sin(b),
+   25*cos(b+0.03),25*sin(b+0.03)
+   )
+  end
+  color(7)
+  for a=0.0625,1,0.0625 do
+   local b=a+time()/5
+   line(
+   30*cos(b),30*sin(b),
+   30*cos(b+0.03),30*sin(b+0.03)
+   )
+  end
+  color(0)
+  circfill(0,0,18)
+  
+  draw_children(_c)
+  
+  cam.pop()
+ end
+ 
+ 
+ --head and body
+ local p1=vectorize(entity(0,-5,7))
+ p1.points={
   {11,-11},
     {-11,-11},
     {-23,-20},
@@ -97,10 +136,10 @@ function _init()
     {23,-20},
   {11,-11}
  }
- cat.s=0.5
+ p1.s=0.3
  
  --left arm
- local p2=entity(-10,21,7)
+ local p2=vectorize(entity(-10,21,7))
  p2.points={
   {0,0},
   {-5,7},
@@ -108,7 +147,7 @@ function _init()
  }
  
  --right arm
- local p3=entity(10,21,7)
+ local p3=vectorize(entity(10,21,7))
  p3.points={
   {0,0},
   {5,7},
@@ -116,21 +155,21 @@ function _init()
  }
  
  --left earline
- local p4=entity(-12,-11,7)
+ local p4=vectorize(entity(-12,-11,7))
  p4.points={
   {0,0},
   {-11,7}
  }
  
  --right earline
- local p5=entity(12,-11,7)
+ local p5=vectorize(entity(12,-11,7))
  p5.points={
   {0,0},
   {11,7}
  }
  
  --left eye
- local p6=entity(-13,0,7)
+ local p6=vectorize(entity(-13,0,7))
  p6.points={
   {0,0},
   {-4,4},
@@ -142,14 +181,14 @@ function _init()
  }
  
  --left pupil
- local p7=entity(-10,0,7)
+ local p7=vectorize(entity(-10,0,7))
  p7.points={
   {0,0},
   {0,8}
  }
  
  --right eye
- local p8=entity(7,0,7)
+ local p8=vectorize(entity(7,0,7))
  p8.points={
   {0,0},
   {-4,4},
@@ -161,7 +200,7 @@ function _init()
  }
  
  --right pupil
- local p9=entity(10,0,7)
+ local p9=vectorize(entity(10,0,7))
  p9.points={
   {0,0},
   {0,8}
@@ -169,7 +208,7 @@ function _init()
  
  
  --mouth
- local p10=entity(-3,16,7)
+ local p10=vectorize(entity(-3,16,7))
  p10.points={
   {0,0},
   {3,-3},
@@ -177,7 +216,7 @@ function _init()
  }
  
  --left leg
- local p11=entity(-7,37,7)
+ local p11=vectorize(entity(-7,37,7))
  p11.points={
   {0,0},
   {-5,7},
@@ -185,7 +224,7 @@ function _init()
  }
  
  --right leg
- local p12=entity(7,37,7)
+ local p12=vectorize(entity(7,37,7))
  p12.points={
   {0,0},
   {5,7},
@@ -193,32 +232,33 @@ function _init()
  }
  
  --tail
- local p13=entity(0,43,7)
+ local p13=vectorize(entity(0,43,7))
  p13.points={
   {0,0},
   {0,18}
  }
  
  --headline
- local p14=entity(-7,21,7)
+ local p14=vectorize(entity(-7,21,7))
  p14.points={
   {0,0},
   {14,0}
  }
  
- add(cat.children,p2)
- add(cat.children,p3)
- add(cat.children,p4)
- add(cat.children,p5)
- add(cat.children,p6)
- add(cat.children,p7)
- add(cat.children,p8)
- add(cat.children,p9)
- add(cat.children,p10)
- add(cat.children,p11)
- add(cat.children,p12)
- add(cat.children,p13)
- add(cat.children,p14)
+ add(cat.children,p1)
+ add(p1.children,p2)
+ add(p1.children,p3)
+ add(p1.children,p4)
+ add(p1.children,p5)
+ add(p1.children,p6)
+ add(p1.children,p7)
+ add(p1.children,p8)
+ add(p1.children,p9)
+ add(p1.children,p10)
+ add(p1.children,p11)
+ add(p1.children,p12)
+ add(p1.children,p13)
+ add(p1.children,p14)
  
  palette={}
  palette.c=1
@@ -274,7 +314,7 @@ function _init()
   color(7)
   o=entity(64,64)
   cam.push(o)
-  draw_vector(cat)
+  cat.draw(cat)
   cam.pop()
   
   camera(0,0)
@@ -314,6 +354,12 @@ function draw_bg()
  end
 end
 
+function draw_children(_c)
+ for c in all(_c.children) do
+  c.draw(c)
+ end
+end
+
 function draw_vector(_p)
  cam.push(_p)
  
@@ -327,9 +373,7 @@ function draw_vector(_p)
   p1 = p2
  end
  
- for c in all(_p.children) do
-  draw_vector(c)
- end
+ draw_children(_p)
  
  cam.pop()
 end
