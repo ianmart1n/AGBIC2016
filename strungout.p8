@@ -74,36 +74,147 @@ function _init()
   cam.n_stack-=1
  end
  
+ --head and body
  p=entity(0,0,7)
  p.points={
   {11,-11},
-{-11,-11},
-{-23,-20},
-{-23,10},
-{-10,21},
-{-7,21},
-{-7,37},
-{0,43},
-{7,37},
-{7,21},
-{10,21},
-{23,10},
-{23,-20},
+    {-11,-11},
+    {-23,-20},
+    {-23,10},
+    {-10,21},
+    {-7,21},
+    {-7,37},
+    {0,43},
+    {7,37},
+    {7,21},
+    {10,21},
+    {23,10},
+    {23,-20},
   {11,-11}
  }
  
- p2=entity(9,9,8)
+ --left arm
+ p2=entity(-10,21,7)
  p2.points={
-  {-5,-5},
-  {5,-5},
-  {5,5},
-  {-5,5},
-  {-5,-5},
-  {5,5}
+  {0,0},
+  {-5,7},
+  {-5,13}
+ }
+ 
+ --right arm
+ p3=entity(10,21,7)
+ p3.points={
+  {0,0},
+  {5,7},
+  {5,13}
+ }
+ 
+ --left earline
+ p4=entity(-12,-11,7)
+ p4.points={
+  {0,0},
+  {-11,7}
+ }
+ 
+ --right earline
+ p5=entity(12,-11,7)
+ p5.points={
+  {0,0},
+  {11,7}
+ }
+ 
+ --left eye
+ p6=entity(-13,0,7)
+ p6.points={
+  {0,0},
+  {-4,4},
+  {0,8},
+  {6,8},
+  {10,4},
+  {6,0},
+  {0,0}
+ }
+ 
+ --left pupil
+ p7=entity(-10,0,7)
+ p7.points={
+  {0,0},
+  {0,8}
+ }
+ 
+ --right eye
+ p8=entity(7,0,7)
+ p8.points={
+  {0,0},
+  {-4,4},
+  {0,8},
+  {6,8},
+  {10,4},
+  {6,0},
+  {0,0}
+ }
+ 
+ --right pupil
+ p9=entity(10,0,7)
+ p9.points={
+  {0,0},
+  {0,8}
+ }
+ 
+ 
+ --mouth
+ p10=entity(-3,16,7)
+ p10.points={
+  {0,0},
+  {3,-3},
+  {6,0}
+ }
+ 
+ --left leg
+ p11=entity(-7,37,7)
+ p11.points={
+  {0,0},
+  {-5,7},
+  {-5,13}
+ }
+ 
+ --right leg
+ p12=entity(7,37,7)
+ p12.points={
+  {0,0},
+  {5,7},
+  {5,13}
+ }
+ 
+ --tail
+ p13=entity(0,43,7)
+ p13.points={
+  {0,0},
+  {0,18}
+ }
+ 
+ --headline
+ p14=entity(-7,21,7)
+ p14.points={
+  {0,0},
+  {14,0}
  }
  
  p.children={}
  add(p.children,p2)
+ add(p.children,p3)
+ add(p.children,p4)
+ add(p.children,p5)
+ add(p.children,p6)
+ add(p.children,p7)
+ add(p.children,p8)
+ add(p.children,p9)
+ add(p.children,p10)
+ add(p.children,p11)
+ add(p.children,p12)
+ add(p.children,p13)
+ add(p.children,p14)
+ 
 end
 
 function _update()
