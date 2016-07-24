@@ -334,13 +334,12 @@ function _init()
   cam.pop()
   
   camera(0,0)
-  print(cam.p[1],1,1)
-  print(cam.p[2],50,1)
-  print(cam.sp[1],1,10)
-  print(cam.sp[2],50,10)
-  print(#cam.p_stack,100,1)
-  print(cat.p[1],1,20)
-  print(cat.p[2],50,20)
+  print_ol("cam.x:"..cam.p[1],1,1,0,7)
+  print_ol("cam.y:"..cam.p[2],60,1,0,7)
+  print_ol("cat.x:"..cat.p[1],1,10,0,7)
+  print_ol("cat.y:"..cat.p[2],60,10,0,7)
+  print_ol("mem:"..stat(0),1,120,0,7)
+  print_ol("cpu:"..stat(1),60,120,0,7)
  end
  
  scenes["menu"]=menu
@@ -400,6 +399,17 @@ function draw_vector(_p)
  draw_children(_p)
  
  cam.pop()
+end
+
+function print_ol(_s,_x,_y,_c1,_c2)
+ color(_c1)
+ for x=_x-1,_x+1 do
+ for y=_y-1,_y+1 do
+  print(_s,x,y)
+ end
+ end
+ color(_c2)
+ print(_s,_x,_y)
 end
 __gfx__
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ccccc0ccccccccc0ccccc0000000
