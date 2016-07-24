@@ -45,6 +45,8 @@ function v_mul(_v,_s)
 end
 
 function _init()
+ cartdata("sweetheartsquad_strungout")
+
  cam=entity(0,0)
  cam.p_stack={}
  cam.a_stack={}
@@ -261,32 +263,43 @@ function _init()
  add(cat_mesh.children,p14)
  
  palette={}
- palette.c=1
  palette.a={}
- add(palette.a,{0,1,7,12,"earth blue"})
- add(palette.a,{0,2,6,8,"mars red"})
+ add(palette.a,{0,1,7,12,15,"earth blue"})
+ add(palette.a,{0,2,6,8,5,"mars red"})
+ add(palette.a,{6,5,0,7,0,"lunar grey"})
+ add(palette.a,{14,15,0,7,13,"jupiter pink"})
+ add(palette.a,{0,4,10,9,15,"saturn sienna"})
+ add(palette.a,{4,5,13,0,2,"uranus brown"})
+ add(palette.a,{1,7,13,12,15,"neptune navy"})
+ add(palette.a,{2,14,13,15,7,"pluto purple"})
+ add(palette.a,{8,1,12,15,0,"mercury also has a colour"})
+ add(palette.a,{3,5,6,7,11,"venus verde"})
  palette.set=function(v)
   palette.c=(v-1)%#palette.a+1
-  for i=1,4 do
+  dset(1,palette.c)
+  for i=1,5 do
    pal(palette.a[1][i],palette.a[palette.c][i])
   end
  end
+ palette.set(dget(1))
  local menu={}
  
  menu.u=function()
   if btn(4) and btn(5) then scenes.current="game" end
-  if btnp(0) then palette.set(palette.c+1) end
-  if btnp(1) then palette.set(palette.c-1) end
+  if btnp(0) then palette.set(palette.c-1) end
+  if btnp(1) then palette.set(palette.c+1) end
  end
  
  menu.d=function()
-  cls()
+  camera(0,0)
+  color(0)
+  rectfill(0,0,127,127)
   camera(0,flr(sin(time()/10)*5+0.5))
   sspr(96,0,30,30,64-15,64-15)
   color(12)
   print("\143 \143 in heaven's high \143 \143",10,80)
   print("press z+x to start",28,90)
-  print("‹ "..palette.a[palette.c][5].." ‘",52-#palette.a[palette.c][5]/2*4,100)
+  print("‹ "..palette.a[palette.c][6].." ‘",52-#palette.a[palette.c][6]/2*4,100)
  end
  
  local game={}
@@ -309,7 +322,9 @@ function _init()
  end
  
  game.d=function()
-  cls()
+  camera(0,0)
+  color(0)
+  rectfill(0,0,127,127)
   draw_bg()
   
   color(7)
@@ -330,7 +345,7 @@ function _init()
  
  scenes["menu"]=menu
  scenes["game"]=game
- scenes.current = "game"
+ scenes.current = "menu"
 end
 
 function _update()
