@@ -86,6 +86,7 @@ function _init()
  cat=entity(0,0,7)
  cat.v_a=0
  cat.v_p=0
+ cat.s = 0.3
  cat.draw=function(_c)
   cam.push(_c)
   
@@ -119,8 +120,8 @@ function _init()
  
  
  --head and body
- local p1=vectorize(entity(0,-5,7))
- p1.points={
+ cat_mesh=vectorize(entity(0,-20,7))
+ cat_mesh.points={
   {11,-11},
     {-11,-11},
     {-23,-20},
@@ -136,7 +137,6 @@ function _init()
     {23,-20},
   {11,-11}
  }
- p1.s=0.3
  
  --left arm
  local p2=vectorize(entity(-10,21,7))
@@ -245,20 +245,20 @@ function _init()
   {14,0}
  }
  
- add(cat.children,p1)
- add(p1.children,p2)
- add(p1.children,p3)
- add(p1.children,p4)
- add(p1.children,p5)
- add(p1.children,p6)
- add(p1.children,p7)
- add(p1.children,p8)
- add(p1.children,p9)
- add(p1.children,p10)
- add(p1.children,p11)
- add(p1.children,p12)
- add(p1.children,p13)
- add(p1.children,p14)
+ add(cat.children,cat_mesh)
+ add(cat_mesh.children,p2)
+ add(cat_mesh.children,p3)
+ add(cat_mesh.children,p4)
+ add(cat_mesh.children,p5)
+ add(cat_mesh.children,p6)
+ add(cat_mesh.children,p7)
+ add(cat_mesh.children,p8)
+ add(cat_mesh.children,p9)
+ add(cat_mesh.children,p10)
+ add(cat_mesh.children,p11)
+ add(cat_mesh.children,p12)
+ add(cat_mesh.children,p13)
+ add(cat_mesh.children,p14)
  
  palette={}
  palette.c=1
@@ -304,7 +304,8 @@ function _init()
   
   cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
   cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
- 
+  
+  cat_mesh.s=1+sin(time())/10
  end
  
  game.d=function()
@@ -348,8 +349,16 @@ function draw_bg()
  local y=cam.p[2]%gap
  for a=-x,127+gap,gap do
  for b=-y,127+gap,gap do
-  line(a-2,b,a+2,b)
-  line(a,b-2,a,b+2)
+  local t=cam.p[1]-cat.p[1]+a-64
+  local s=cam.p[2]-cat.p[2]+b-64
+  local d=sqrt(s*s+t*t)
+  t/=d
+  s/=d
+  t*=-cat.v_p
+  s*=-cat.v_p
+  line(a-2+t,b+s,a+2+t,b+s)
+  line(a+t,b-2+s,a+t,b+2+s)
+  --line(a,b,a+t,b+s)
  end
  end
 end
