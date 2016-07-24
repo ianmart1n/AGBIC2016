@@ -47,6 +47,7 @@ end
 function _init()
  cartdata("sweetheartsquad_strungout")
 
+ cell_gap=24 -- distance between cells
  cam=entity(0,0)
  cam.p_stack={}
  cam.a_stack={}
@@ -356,16 +357,23 @@ function _draw()
 end
 
 function draw_bg()
- camera(0,0)
+ camera(cam.p[1]+cam.p[1]%cell_gap,cam.p[2]+cam.p[2]%cell_gap)
  color(15)
- local gap=24
- local x=cam.p[1]%gap
- local y=cam.p[2]%gap
- for a=-x,127+gap,gap do
- for b=-y,127+gap,gap do
-  local t=cam.p[1]-cat.p[1]+a-64
-  local s=cam.p[2]-cat.p[2]+b-64
-  local d=sqrt(s*s+t*t)
+ for x=cam.p[1],cam.p[1]+127+cell_gap,cell_gap do
+ for y=cam.p[2],cam.p[2]+127+cell_gap,cell_gap do
+  local t=x-cat.p[1]-64
+  local s=y-cat.p[2]-64
+  local d=-sqrt(s*s+t*t)
+  t/=d
+  s/=d
+  t*=cat.v_p
+  s*=cat.v_p
+  
+  line(x-2+t,y+s,x+2+t,y+s)
+  line(x+t,y-2+s,x+t,y+2+s)
+ end
+ end
+end
   t/=d
   s/=d
   t*=-cat.v_p
