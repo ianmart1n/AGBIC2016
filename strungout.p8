@@ -73,19 +73,24 @@ function _init()
  
  -- stars
  stars={}
- for i=1,32 do
-  local c=rnd()
-  if c < 0.3 then
+ local num_stars=32
+ for i=1,sqrt(num_stars) do
+ for j=1,sqrt(num_stars) do
+  local c=i*j/num_stars
+  if c < 0.25 then
    c=5
-  elseif c < 0.6 then
+  elseif c < 0.5 then
    c=15
+  elseif c < 0.75 then
+   c=12
   else
    c=7
   end
-  local star=entity(rnd(255),rnd(255),c)
-  star.p_v=rnd()*0.9+0.1
+  local star=entity((sin(i/sqrt(num_stars))+sin(j/(sqrt(num_stars)+1)))*255,(cos(j/sqrt(num_stars))+cos(i/(sqrt(num_stars)-1)))*255,c)
+  star.p_v=i*j/num_stars*0.9+0.1
   star.o_p={star.p[1],star.p[2]}
   add(stars,star)
+ end
  end
  
  -- camera
@@ -463,12 +468,7 @@ function _init()
   rectfill(0,0,127,127)
   draw_bg()
   
-  camera(0,0)
-  for star in all(stars) do
-   color(star.c)
-   circ(star.p[1],star.p[2],1)
-   line(star.p[1],star.p[2],star.o_p[1],star.o_p[2])
-  end
+  draw_stars()
   
   color(7)
   o=entity(64,64)
@@ -539,6 +539,15 @@ function draw_icons()
    sspr(16*s.cell.icon,0,16,16,x+cell_gap/2-8,y+cell_gap/2-8)
   end
  end
+ end
+end
+
+function draw_stars()
+ camera(0,0)
+ for star in all(stars) do
+  color(star.c)
+  circ(star.p[1],star.p[2],1)
+  line(star.p[1],star.p[2],star.o_p[1],star.o_p[2])
  end
 end
 
