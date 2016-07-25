@@ -43,6 +43,9 @@ end
 function v_mul(_v,_s)
  return {_v[1]*_s,_v[2]*_s}
 end
+function v_lerp(_a,_b,_t)
+ return{lerp(_a[1],_b[1],_t),lerp(_a[2],_b[2],_t)}
+end
 
 function _init()
  cartdata("sweetheartsquad_strungout")
