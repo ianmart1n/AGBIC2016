@@ -477,14 +477,8 @@ function _init()
   cam.pop()
   
   draw_icons()
-  
-  camera(0,0)
-  print_ol("cam.x:"..cam.p[1],1,1,0,7)
-  print_ol("cam.y:"..cam.p[2],60,1,0,7)
-  print_ol("cat.x:"..cat.p[1],1,10,0,7)
-  print_ol("cat.y:"..cat.p[2],60,10,0,7)
-  print_ol("mem:"..stat(0),1,120,0,7)
-  print_ol("cpu:"..stat(1),60,120,0,7)
+ 
+  --draw_debug() 
  end
  
  scenes["menu"]=menu
@@ -498,6 +492,16 @@ end
 
 function _draw()
  scenes[scenes.current].d()
+end
+
+function draw_debug()
+ camera(0,0)
+ print_ol("cam.x:"..cam.p[1],1,1,0,7)
+ print_ol("cam.y:"..cam.p[2],60,1,0,7)
+ print_ol("cat.x:"..cat.p[1],1,10,0,7)
+ print_ol("cat.y:"..cat.p[2],60,10,0,7)
+ print_ol("mem:"..stat(0),1,120,0,7)
+ print_ol("cpu:"..stat(1),60,120,0,7)
 end
 
 function draw_bg()
