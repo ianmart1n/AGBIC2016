@@ -60,6 +60,23 @@ function _init()
  end
  end
  
+ -- stars
+ stars={}
+ for i=1,32 do
+  local c=rnd()
+  if c < 0.3 then
+   c=5
+  elseif c < 0.6 then
+   c=15
+  else
+   c=7
+  end
+  local star=entity(rnd(255),rnd(255),c)
+  star.p_v=rnd()*0.9+0.1
+  star.o_p={star.p[1],star.p[2]}
+  add(stars,star)
+ end
+ 
  -- camera
  cam=entity(0,0)
  cam.p_stack={}
@@ -344,11 +361,37 @@ function _init()
   cat.v_p *= 0.9
   
   cat.a += cat.v_a
+  
   cat.p[1] += cos(cat.a-0.25)*cat.v_p
   cat.p[2] += sin(cat.a-0.25)*cat.v_p
   
+  
+  local d={cam.p[1],cam.p[2]}
   cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
   cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
+  d = v_sub(cam.p,d)
+  
+  for star in all(stars) do
+   star.o_p[1]=star.p[1]
+   star.o_p[2]=star.p[2]
+   star.p[1] -= d[1]*star.p_v
+   star.p[2] -= d[2]*star.p_v
+   
+   if star.p[1] > 255 then
+    star.p[1] -= 255
+    star.o_p[1] -= 255
+   elseif star.p[1] < 0 then
+    star.p[1] += 255
+    star.o_p[1] += 255
+   end
+   if star.p[2] > 255 then
+    star.p[2] -= 255
+    star.o_p[2] -= 255
+   elseif star.p[2] < 0 then
+    star.p[2] += 255
+    star.o_p[2] += 255
+   end
+  end
   
   cat_mesh.s=1+sin(time())/10
  end
@@ -358,6 +401,14 @@ function _init()
   color(0)
   rectfill(0,0,127,127)
   draw_bg()
+  
+  camera(0,0)
+  for star in all(stars) do
+   color(star.c)
+   circ(star.p[1],star.p[2],1)
+   line(star.p[1],star.p[2],star.o_p[1],star.o_p[2])
+   --pset(star.p[1],star.p[2],star.c)
+  end
   
   color(7)
   o=entity(64,64)
