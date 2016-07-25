@@ -325,9 +325,18 @@ function _init()
  add(palette.a,{2,14,13,15,7,"pluto purple"})
  add(palette.a,{8,1,12,15,0,"mercury also has a colour"})
  add(palette.a,{3,5,6,7,11,"venus verde"})
+ add(palette.a,{0,1,7,12,15,"random"})
  palette.set=function(v)
   palette.c=flr((v-1)%#palette.a+1)
   dset(1,palette.c)
+  if palette.c==#palette.a then
+   local a={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+   for i=1,5 do
+    palette.a[palette.c][i] = a[flr(rnd()*#a+0.5)]
+    del(a,palette.a[palette.c][i])
+   end
+  end
+  
   for i=1,5 do
    pal(palette.a[1][i],palette.a[palette.c][i])
   end
