@@ -456,7 +456,7 @@ function _init()
   --pulses
   for p in all(pulses) do
    if time()-pulse_time > p.o then
-    p.p=v_lerp(p.p,p.t,0.1)
+    p.p=v_lerp(p.p,p.t,0.1/cell_space)
    end
   end
   
