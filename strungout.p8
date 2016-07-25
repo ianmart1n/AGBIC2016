@@ -185,7 +185,7 @@ function _init()
  cat=entity(0,0,7)
  cat.v_a=0
  cat.v_p=0
- cat.s = 0.3
+ cat.s = 0.33
  cat.cell = nil
  cat.talk={}
  cat.draw=function(_c)
@@ -193,26 +193,26 @@ function _init()
   
   --rings
   color(0)
-  circfill(0,0,30)
+  circfill(0,0,90*cam.s)
   color(12)
-  circfill(0,0,20)
+  circfill(0,0,66*cam.s)
   for a=0.1,1,0.1 do
    local b=a+time()/10
    line(
-   25*cos(b),25*sin(b),
-   25*cos(b+0.03),25*sin(b+0.03)
+   77*cam.s*cos(b),77*cam.s*sin(b),
+   77*cam.s*cos(b+0.03),77*cam.s*sin(b+0.03)
    )
   end
   color(7)
   for a=0.0625,1,0.0625 do
    local b=a+time()/5
    line(
-   30*cos(b),30*sin(b),
-   30*cos(b+0.03),30*sin(b+0.03)
+   90*cam.s*cos(b),90*cam.s*sin(b),
+   90*cam.s*cos(b+0.03),90*cam.s*sin(b+0.03)
    )
   end
   color(0)
-  circfill(0,0,18)
+  circfill(0,0,60*cam.s)
   
   draw_children(_c)
   
