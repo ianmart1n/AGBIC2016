@@ -60,6 +60,17 @@ function _init()
  end
  end
  
+ bg={}
+ for x=0,127+cell_gap,cell_gap do
+  bg[x]={}
+ for y=0,127+cell_gap,cell_gap do
+  bg[x][y]={}
+  bg[x][y].p={x,y}
+  bg[x][y].r=0
+  bg[x][y].cell=nil
+ end
+ end
+ 
  -- stars
  stars={}
  for i=1,32 do
@@ -121,6 +132,7 @@ function _init()
  cat.v_a=0
  cat.v_p=0
  cat.s = 0.3
+ cat.cell = nil
  cat.draw=function(_c)
   cam.push(_c)
   
@@ -353,10 +365,14 @@ function _init()
  -- game scene
  local game={}
  game.u=function()
+ 
+  -- input
   if btn(0) then cat.v_a += 0.01 end
   if btn(1) then cat.v_a -= 0.01 end
   if btn(2) then cat.v_p -= 0.75 end
   if btn(3) then cat.v_p += 0.25 end
+  
+  -- player
   cat.v_a *= 0.7
   cat.v_p *= 0.9
   
@@ -365,12 +381,14 @@ function _init()
   cat.p[1] += cos(cat.a-0.25)*cat.v_p
   cat.p[2] += sin(cat.a-0.25)*cat.v_p
   
+  cat_mesh.s=1+sin(time())/10
   
   local d={cam.p[1],cam.p[2]}
   cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
   cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
   d = v_sub(cam.p,d)
   
+  -- stars
   for star in all(stars) do
    star.o_p[1]=star.p[1]
    star.o_p[2]=star.p[2]
@@ -393,7 +411,50 @@ function _init()
    end
   end
   
-  cat_mesh.s=1+sin(time())/10
+  -- bg
+  local rmin=6
+  local cmin=nil
+  d=v_sub(cat.p,cam.p)
+  for a=0,127+cell_gap,cell_gap do
+  for b=0,127+cell_gap,cell_gap do
+   -- get offset for camera
+   -- and distortion
+   local p=bg[a][b]
+   p.p[1]=a-cam.p[1]%cell_gap
+   p.p[2]=b-cam.p[2]%cell_gap
+   local t = abs(d[1]-p.p[1]+64-cell_gap/2)
+   local s = abs(d[2]-p.p[2]+64-cell_gap/2)
+   p.r = sqrt(s+t)
+   p.a = atan2(t,s)
+   
+   t=flr((a+cam.p[1])/cell_gap)/cell_space
+   s=flr((b+cam.p[2])/cell_gap)/cell_space
+   
+   -- check for actual cells
+   if t%1==0 and
+      s%1 == 0 and
+      t == mid(-32,t,32) and 
+      s == mid(-32,s,32) 
+   then
+    p.cell = cells
+    [flr(t)]
+    [flr(s)]
+    
+    -- check for closest cell
+    if p.r < rmin then
+     rmin = p.r
+     cmin = p.cell
+    end
+   else
+    p.cell = nil
+   end
+   
+   -- distort based on speed
+   p.r = p.r/8*cat.v_p
+  end
+  end
+  
+  cat.cell=cmin
  end
  
  game.d=function()
@@ -407,7 +468,6 @@ function _init()
    color(star.c)
    circ(star.p[1],star.p[2],1)
    line(star.p[1],star.p[2],star.o_p[1],star.o_p[2])
-   --pset(star.p[1],star.p[2],star.c)
   end
   
   color(7)
@@ -441,52 +501,42 @@ function _draw()
 end
 
 function draw_bg()
- camera(cam.p[1]+cam.p[1]%cell_gap,cam.p[2]+cam.p[2]%cell_gap)
+ camera(0,0)
  color(15)
- for x=cam.p[1],cam.p[1]+127+cell_gap,cell_gap do
- for y=cam.p[2],cam.p[2]+127+cell_gap,cell_gap do
-  local t=x-cat.p[1]-64
-  local s=y-cat.p[2]-64
-  local d=-sqrt(s*s+t*t)
-  t/=d
-  s/=d
-  t*=cat.v_p
-  s*=cat.v_p
-  
-  line(x-2+t,y+s,x+2+t,y+s)
-  line(x+t,y-2+s,x+t,y+2+s)
+ for a=0,127+cell_gap,cell_gap do
+ for b=0,127+cell_gap,cell_gap do
+  local s=bg[a][b]
+  local x=s.p[1]+cos(s.a)*s.r
+  local y=s.p[2]+sin(s.a)*s.r
+  line(x-2,y,x+2,y)
+  line(x,y-2,x,y+2)
  end
  end
 end
 
 function draw_icons()
- camera(cam.p[1]+cam.p[1]%cell_gap,cam.p[2]+cam.p[2]%cell_gap)
- for x=cam.p[1],cam.p[1]+127+cell_gap,cell_gap do
- for y=cam.p[2],cam.p[2]+127+cell_gap,cell_gap do
-  local t=x-cat.p[1]-64
-  local s=y-cat.p[2]-64
-  local d=-sqrt(s*s+t*t)
-  t/=d
-  s/=d
-  t*=cat.v_p
-  s*=cat.v_p
-  
-  if flr(x/cell_gap)%cell_space == 0 and flr(y/cell_gap)%cell_space==0 then
+ camera(0,0)
+ color(15)
+ for a=0,127+cell_gap,cell_gap do
+ for b=0,127+cell_gap,cell_gap do
+  local s=bg[a][b]
+  local x=s.p[1]+cos(s.a)*s.r
+  local y=s.p[2]+sin(s.a)*s.r
+  if s.cell != nil then
    
-   local cell = cells
-   [flr(x/(cell_gap*cell_space))]
-   [flr(y/(cell_gap*cell_space))]
-   if d > -32 then
+   -- selected cell
+   if s.cell == cat.cell then
+    color(12)
     pal(7,palette.a[palette.c][4])
-    for a=x+t+3,x+t+5 do
-    for b=y+s+3,y+s+5 do
-     sspr(16*cell.icon,0,16,16,a,b)
+    for c=x+cell_gap/2-1-8,x+cell_gap/2+1-8 do
+    for d=y+cell_gap/2-1-8,y+cell_gap/2+1-8 do
+     sspr(16*s.cell.icon,0,16,16,c,d)
     end
     end
     pal(7,palette.a[palette.c][3])
    end
-   sspr(16*cell.icon,0,16,16,x+4+t,y+4+s)
    
+   sspr(16*s.cell.icon,0,16,16,x+cell_gap/2-8,y+cell_gap/2-8)
   end
  end
  end
