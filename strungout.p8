@@ -349,6 +349,9 @@ function _init()
  add(palette.a,{3,5,6,7,11,"venus verde"})
  add(palette.a,{0,1,7,12,15,"random"})
  palette.set=function(v)
+  if palette.c != nil then
+   sfx(63,3)
+  end
   palette.c=flr((v-1)%#palette.a+1)
   dset(1,palette.c)
   if palette.c==#palette.a then
@@ -363,7 +366,6 @@ function _init()
    pal(palette.a[1][i],palette.a[palette.c][i])
   end
   
-  music(0,0,1+2+4)
  end
  palette.set(dget(1))
  
@@ -745,7 +747,9 @@ function _init()
  scenes["over"]=over
  scenes.current = "menu"
  
+  
  --say(6,"lorem ipsum dolor sit amet, consectetur adipiscing elit. mauris eget lobortis massa.")
+ music(0,0,1+2+4)
 end
 
 function _update()
