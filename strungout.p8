@@ -1,6 +1,10 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
+-- strung out in heaven's high
+-- made by sean & ian for #agbic
+-- inspired by daruma studio's famicase
+
 scenes={}
 
 function entity(_x,_y,_c)
