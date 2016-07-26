@@ -72,6 +72,28 @@ function _init()
    cell.interact=function(cell)
     --empty cell
    end
+  elseif cell.icon == 1 then
+   cell.interact=function(cell)
+    cat.nip+=1
+    cam.p[1] += rnd(15)-rnd(15)
+    cam.p[2] += rnd(15)-rnd(15)
+   
+    for i=0,1,0.05 do
+    
+     local p=entity(cat.p[1]+25*cos(i),cat.p[2]+25*sin(i),12)
+     p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
+    
+     p.s=rnd(5)+5
+     p.draw=function(p)
+      cam.push(p)
+      circ(0,0,p.s)
+      cam.pop()
+     end
+    
+     add(parts,p)
+    end
+    say(6,"found catnip!")
+   end
   elseif cell.icon == 4 then
    cell.interact=function(cell)
     pulses={}
@@ -141,6 +163,8 @@ function _init()
  end
  end
  
+ parts={}
+ 
  -- camera
  cam=entity(0,0)
  cam.p_stack={}
@@ -182,6 +206,7 @@ function _init()
  
  -- player
  cat=entity(0,0,7)
+ cat.nip=5
  cat.v_a=0
  cat.v_p=0
  cat.s = 0.33
@@ -196,6 +221,7 @@ function _init()
   color(12)
   circfill(0,0,66*cam.s)
   for a=0.1,1,0.1 do
+   if a > cat.nip/10 then color(7) end
    local b=a+time()/10
    line(
    77*cam.s*cos(b),77*cam.s*sin(b),
@@ -435,6 +461,15 @@ function _init()
   if btn(2) then cat.v_p -= 0.75 end
   if btn(3) then cat.v_p += 0.25 end
   
+  --catnip
+  cat.nip -= 0.001
+  
+  cat.nip=mid(0,cat.nip,10)
+  
+  
+  -- higher=bouncier scale
+  cat.s=0.3+(sin(time())+1)*0.05*cat.nip/10
+  
   if btnp(4) or btnp(5) then
    if cat.cell != nil then
     cat.cell.interact(cat.cell)
@@ -456,6 +491,16 @@ function _init()
   for p in all(pulses) do
    if time()-pulse_time > p.o then
     p.p=v_lerp(p.p,p.t,0.1/cell_space)
+   end
+  end
+  
+  -- parts
+  for p in all(parts) do
+   p.d = v_mul(p.d,0.95)
+   p.p = v_add(p.p,p.d)
+   p.s *= 0.95
+   if p.s < 0.1 then
+    del(parts,p)
    end
   end
   
@@ -547,22 +592,37 @@ function _init()
  game.d=function()
   camera(0,0)
   color(0)
-  rectfill(0,0,127,127)
-  draw_bg()
   
+  if cat.nip < 2 then
+   rectfill(0,0,127,127)
+  else
+   local c=(cat.nip-2)/8
+   c=1-c
+   c*=10
+   c+=1
+   for i=0,25*c do
+    line(rnd(127),0,rnd(127),127)
+    line(0,rnd(127),127,rnd(127))
+   end
+  end
+  
+  draw_bg()
   draw_stars()
   
-  color(7)
   o=entity(64,64)
   cam.push(o)
+  
   cat.draw(cat)
+  
+  color(12)
+  for p in all(parts) do
+   p.draw(p)
+  end
+  
   cam.pop()
   
-  
   draw_icons()
-  
   draw_pulses()
- 
   draw_talk()
  
   --draw_debug() 
@@ -596,6 +656,8 @@ function draw_debug()
  print_ol("cat.y:"..cat.p[2],60,10,0,7)
  print_ol("mem:"..stat(0),1,120,0,7)
  print_ol("cpu:"..stat(1),60,120,0,7)
+  
+ print_ol("nip:"..cat.nip,1,20,0,7)
 end
 
 function draw_bg()
@@ -718,12 +780,12 @@ function print_ol(_s,_x,_y,_c1,_c2)
  print(_s,_x,_y)
 end
 __gfx__
-0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ccccc0ccccccccc0ccccc0000000
-00000000000000000000000000000000000000070000000000000000000000000000000000000000000000000000000000ccccccc0ccccccccc0ccccccc00000
-0000000000000000000000000077000000000001070000000000000000000700000000000000700000000000000000000cccccccc0ccccccccc0cccccccc0000
-000000000000000000070000077700000000077711100000000000000000000000000000000777000000000000000000ccccc00000ccccccccc0ccccccccc000
-000000000000000000000077777700000007771777700000000000000001000000000000007170000000070000000000ccccccccc0ccccccccc0cccc0cccc000
-000000000000000000000771777000000000111110100000000000077071070000000077717700000000000000700000ccccccccc00000000000ccc000ccc000
+0000000000000000700707077700000000000000000000000000000000000000000000000000000000000000000000000000ccccc0ccccccccc0ccccc0000000
+00000000000000007707070707000000000000070000000000000000000000000000000000000000000000000000000000ccccccc0ccccccccc0ccccccc00000
+0000000000000000707707077700000000000001070000000000000000000700000000000000700000000000000000000cccccccc0ccccccccc0cccccccc0000
+000000000000000070070707000000000000077711100000000000000000000000000000000777000000000000000000ccccc00000ccccccccc0ccccccccc000
+000000000000000000000000000000000007771777700000000000000001000000000000007170000000070000000000ccccccccc0ccccccccc0cccc0cccc000
+000000000000000000000777777000000000111110100000000000077071070000000077717700000000000000700000ccccccccc00000000000ccc000ccc000
 00000000000000000000071111700000007777777777700000000070011110000000007111100000000000000000000000000cccc000ccccc000cccc0cccc000
 000000000000000000000711117770000011111111110000000000007700100000000071771000000007777700000000ccccccccc000ccccc000cccc0ccc0000
 000000000000000007000711117770000000110077777700000700707000700000000071717000000000711777777000cccccccc1000ccccc000cccc0cccc000
