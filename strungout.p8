@@ -150,6 +150,8 @@ function _init()
  -- player
  cat=entity(0,0,7)
  cat.nip=5
+ cat.nipw1=false
+ cat.nipw2=false
  cat.v_a=0
  cat.v_p=0
  cat.s = 0.33
@@ -409,9 +411,27 @@ function _init()
   
   cat.nip=mid(0,cat.nip,10)
   
+  if cat.nip < 2 then
+   if not cat.nipw2 then
+    cat.nipw2 = true
+    say(6,"nip's at an alltime low!")
+   end
+  else
+   cat.nipw2 = false
+   
+   if cat.nip < 5 then
+    if not cat.nipw1 then
+     cat.nipw1 = true
+     say(6,"running out of nip...")
+    end
+   else
+    cat.nipw1 = false
+   end
+   
+  end
   
   -- higher=bouncier scale
-  cat.s=0.3+(sin(time())+1)*0.05*cat.nip/10
+  cat.s=0.3+(sin(time())+1)*0.01*cat.nip
   
   if btnp(4) or btnp(5) then
    if cat.cell != nil then
@@ -534,16 +554,24 @@ function _init()
  
  game.d=function()
   camera(0,0)
-  color(0)
-  
-  if cat.nip < 2 then
+  if cat.nip < 3 then
+   color(0)
    rectfill(0,0,127,127)
   else
-   local c=(cat.nip-2)/8
-   c=1-c
-   c*=10
-   c+=1
-   for i=0,25*c do
+   local c=(cat.nip-3)/7
+   c=min(1,1.1-c)
+   color(12)
+   for i=1,10*max(0,0.2-c) do
+    line(rnd(127),0,rnd(127),127)
+    line(0,rnd(127),127,rnd(127))
+   end
+   color(5)
+   for i=1,5*max(0,0.4-c) do
+    line(rnd(127),0,rnd(127),127)
+    line(0,rnd(127),127,rnd(127))
+   end
+   color(0)
+   for i=1,200*c do
     line(rnd(127),0,rnd(127),127)
     line(0,rnd(127),127,rnd(127))
    end
@@ -566,6 +594,19 @@ function _init()
   
   draw_icons()
   draw_pulses()
+  
+  if cat.nip < 2.1 then
+   camera(0,0)
+   local c=1-(cat.nip/2.1)
+   color(0)
+   for i=1,40*c do
+    local j=rnd(127)
+    line(j,0,j,127)
+    j=rnd(127)
+    line(0,j,127,j)
+   end
+  end
+  
   draw_talk()
  
   --draw_debug() 
