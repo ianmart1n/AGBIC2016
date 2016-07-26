@@ -526,7 +526,9 @@ function _init()
      cat.talk.txt=sub(cat.talk.txt,2,#cat.talk.txt)
      c=sub(cat.talk.txt,1,1)
     end
-    s=s..c
+    if c!="\n" then
+     s=s..c
+    end
     cat.talk.txt=sub(cat.talk.txt,2,#cat.talk.txt)
      
     -- line break
@@ -540,6 +542,12 @@ function _init()
      sfx(cat.talk.icon,0)
      cat.talk.txt2=cat.talk.txt2..s
      cat.talk.w+=#s
+    
+     if c == "\n" then
+      cat.talk.txt2=cat.talk.txt2..c
+      cat.talk.w=0
+      cat.talk.h+=1
+     end
     end
     
     -- clear
@@ -780,6 +788,7 @@ function cell_interact(cell)
  elseif cell.icon == 4 then
   pulse_time=time()
   local i=0
+  local num=#pulses
   for s=max(-32,cell.x-2),min(32,cell.x+2) do
   for t=max(-32,cell.y-2),min(32,cell.y+2) do
    i+=1
@@ -795,8 +804,15 @@ function cell_interact(cell)
    end
   end
   end
+  num = max(0,#pulses-num-1)
   cell.icon=0
-  say(4,"beep boop im a satellite")
+  if num == 0 then
+   say(4,"ground control:\nno satellites nearby")
+  elseif num == 1 then
+   say(4,"ground control:\n"..num.." satellite nearby")
+  else
+   say(4,"ground control:\n"..num.." satellites nearby")
+  end
  elseif cell.icon == 5 then
   say(cat.cell.icon,"yo waddup")
  else
