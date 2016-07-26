@@ -73,8 +73,8 @@ function _init()
     pulses={}
     pulse_time=time()
     local i=0
-    for s=cell.x-3,cell.x+3 do
-    for t=cell.y-3,cell.y+3 do
+    for s=max(-32,cell.x-3),min(32,cell.x+3) do
+    for t=max(-32,cell.y-3),min(32,cell.y+3) do
      i+=1
      if cells[s][t].icon ==4 then
       if s!=0 or t!= 0 then
