@@ -5,8 +5,6 @@ __lua__
 -- made by sean & ian for #agbic
 -- inspired by daruma studio's famicase
 
-scenes={}
-
 function entity(_x,_y,_c)
  local e={}
  e.p={}
@@ -53,7 +51,8 @@ end
 
 function _init()
  cartdata("sweetheartsquad_strungout")
- 
+ scenes={}
+
  -- cells
  cell_gap=24 -- distance between cells
  cell_gap_h=cell_gap/2
@@ -68,63 +67,7 @@ function _init()
   cell.x=x
   cell.y=y
   
-  if cell.icon == 0 then
-   cell.interact=function(cell)
-    --empty cell
-   end
-  elseif cell.icon == 1 then
-   cell.interact=function(cell)
-    cat.nip+=1
-    cam.p[1] += rnd(15)-rnd(15)
-    cam.p[2] += rnd(15)-rnd(15)
-   
-    for i=0,1,0.05 do
-    
-     local p=entity(cat.p[1]+25*cos(i),cat.p[2]+25*sin(i),12)
-     p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
-    
-     p.s=rnd(5)+5
-     p.draw=function(p)
-      cam.push(p)
-      circ(0,0,p.s)
-      cam.pop()
-     end
-    
-     add(parts,p)
-    end
-    say(6,"found catnip!")
-   end
-  elseif cell.icon == 4 then
-   cell.interact=function(cell)
-    pulses={}
-    pulse_time=time()
-    local i=0
-    for s=max(-32,cell.x-3),min(32,cell.x+3) do
-    for t=max(-32,cell.y-3),min(32,cell.y+3) do
-     i+=1
-     if cells[s][t].icon ==4 then
-      if s!=0 or t!= 0 then
-       local p={}
-       p.s={cell.x,cell.y}
-       p.p={cell.x,cell.y}
-       p.t={s,t}
-       p.o=i/128
-       add(pulses,p)
-      end
-     end
-    end
-    end
-    say(4,"beep boop im a satellite")
-   end
-  elseif cell.icon == 5 then
-   cell.interact = function()
-    say(cat.cell.icon,"yo waddup")
-   end
-  else
-   cell.interact = function()
-    say(6,"nothing interesting here")
-   end
-  end
+  cell.interact=cell_interact
   
   cells[x][y]=cell
  end
@@ -642,6 +585,56 @@ function say(i,s)
  cat.talk.txt =s
  cat.talk.txt2=""
  cat.talk.time=time() 
+end
+
+function cell_interact(cell)
+ if cell.icon == 0 then
+  --empty cell
+ elseif cell.icon == 1 then
+  cat.nip+=1
+  cam.p[1] += rnd(15)-rnd(15)
+  cam.p[2] += rnd(15)-rnd(15)
+  
+  for i=0,1,0.05 do
+   
+   local p=entity(cat.p[1]+25*cos(i),cat.p[2]+25*sin(i),12)
+   p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
+   
+   p.s=rnd(5)+5
+   p.draw=function(p)
+    cam.push(p)
+    circ(0,0,p.s)
+    cam.pop()
+   end
+   
+   add(parts,p)
+  end
+  say(6,"found catnip!")
+ elseif cell.icon == 4 then
+  pulses={}
+  pulse_time=time()
+  local i=0
+  for s=max(-32,cell.x-3),min(32,cell.x+3) do
+  for t=max(-32,cell.y-3),min(32,cell.y+3) do
+   i+=1
+   if cells[s][t].icon ==4 then
+    if s!=0 or t!= 0 then
+     local p={}
+     p.s={cell.x,cell.y}
+     p.p={cell.x,cell.y}
+     p.t={s,t}
+     p.o=i/128
+     add(pulses,p)
+    end
+   end
+  end
+  end
+  say(4,"beep boop im a satellite")
+ elseif cell.icon == 5 then
+  say(cat.cell.icon,"yo waddup")
+ else
+  say(6,"nothing interesting here")
+ end
 end
 
 function _draw()
