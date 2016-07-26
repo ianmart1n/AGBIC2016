@@ -107,6 +107,7 @@ function _init()
  end
  
  parts={}
+ pulses={}
  
  -- camera
  cam=entity(0,0)
@@ -786,7 +787,6 @@ function cell_interact(cell)
   say(6,"found some space catnip!")
   cell.icon=0
  elseif cell.icon == 4 then
-  pulses={}
   pulse_time=time()
   local i=0
   local num=#pulses
