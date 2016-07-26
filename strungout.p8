@@ -685,8 +685,9 @@ function _init()
   if cat.nip < 2.1 then
    camera(0,0)
    local c=1-(cat.nip/2.1)
+   c*=c
    color(0)
-   for i=1,40*c do
+   for i=1,200*c do
     local j=rnd(127)
     line(j,0,j,127)
     j=rnd(127)
