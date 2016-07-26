@@ -396,9 +396,79 @@ function _init()
   print("press z+x to start",28,90)
  end
  
+ local over={}
+ over.over=false
+ over.txt={}
+ over.u=function()
+  if not over.over then
+   over.time=time()
+   add(over.txt,"game over")
+   add(over.txt,"sordid details following:")
+   add(over.txt,"")
+   if game.details.good == 0 then
+    add(over.txt,"i never done good things")
+   else
+    add(over.txt,"i done "..game.details.good.." good things")
+   end
+   add(over.txt,"")
+   if game.details.bad == 0 then
+    add(over.txt,"i never done bad things")
+   else
+    add(over.txt,"i done "..game.details.bad.." bad things")
+   end
+   add(over.txt,"")
+   if game.details.blue == 0 then
+    add(over.txt,"i never did anything")
+   else
+    add(over.txt,"i did "..game.details.blue.." things")
+   end
+   add(over.txt,"out of the blue")
+   add(over.txt,"")
+   
+   -- "endings"
+   if game.details.good-game.details.bad > game.details.blue then
+    add(over.txt,"i'm happy")
+    add(over.txt,"hope you're happy too")
+   elseif game.details.blue > game.details.bad+game.details.good then
+    add(over.txt,"strung out in heaven's high")
+    add(over.txt,"hitting an all-time low")
+   else
+    add(over.txt,"the shrieking of nothing")
+    add(over.txt,"is killing me")
+   end
+   add(over.txt,"")
+   add(over.txt,"")
+   add(over.txt,"")
+   add(over.txt,"press z+x to restart")
+   
+   
+   over.over=true
+  end
+  if time()-over.time > #over.txt then
+   if btn(4) and btn(5) then
+    run()
+   end
+  end
+ end
+ 
+ over.d=function()
+  camera(0,0)
+  color(0)
+  rectfill(0,0,127,127)
+  color(7)
+  for i=1,#over.txt do
+   if time()-over.time > i then
+    print(over.txt[i],1,i*6)
+   end
+  end
+ end
  
  -- game scene
- local game={}
+ game={}
+ game.details={}
+ game.details.good=0
+ game.details.bad=0
+ game.details.blue=0
  game.u=function()
  
   -- input
@@ -410,7 +480,7 @@ function _init()
   --catnip
   cat.nip -= 0.001
   
-  cat.nip=mid(0,cat.nip,10)
+  cat.nip=min(cat.nip,10)
   
   if cat.nip < 2 then
    if not cat.nipw2 then
@@ -428,7 +498,10 @@ function _init()
    else
     cat.nipw1 = false
    end
-   
+  end
+  
+  if cat.nip < 0 then
+   scenes.current="over"
   end
   
   -- higher=bouncier scale
@@ -628,6 +701,7 @@ function _init()
  
  scenes["menu"]=menu
  scenes["game"]=game
+ scenes["over"]=over
  scenes.current = "menu"
 end
 
