@@ -444,7 +444,7 @@ function _init()
    cat.talk.txt2=cat.talk.txt2..sub(cat.talk.txt,1,1)
    cat.talk.txt=sub(cat.talk.txt,2,#cat.talk.txt)
    
-   if time()-cat.talk.time > 1+#cat.talk.txt2/30 then
+   if time()-cat.talk.time > 2+#cat.talk.txt2/30 then
     cat.talk.txt2=nil
     cat.talk.txt=nil
    end
