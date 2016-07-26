@@ -73,6 +73,8 @@ function _init()
  end
  end
  
+ pulses={}
+ 
  bg={}
  for x=0,127+cell_gap,cell_gap do
   bg[x]={}
@@ -776,11 +778,10 @@ function cell_interact(cell)
   say(6,"found some space catnip!")
   cell.icon=0
  elseif cell.icon == 4 then
-  pulses={}
   pulse_time=time()
   local i=0
-  for s=max(-32,cell.x-3),min(32,cell.x+3) do
-  for t=max(-32,cell.y-3),min(32,cell.y+3) do
+  for s=max(-32,cell.x-2),min(32,cell.x+2) do
+  for t=max(-32,cell.y-2),min(32,cell.y+2) do
    i+=1
    if cells[s][t].icon ==4 then
     if s!=0 or t!= 0 then
@@ -794,6 +795,7 @@ function cell_interact(cell)
    end
   end
   end
+  cell.icon=0
   say(4,"beep boop im a satellite")
  elseif cell.icon == 5 then
   say(cat.cell.icon,"yo waddup")
