@@ -610,6 +610,7 @@ function cell_interact(cell)
    add(parts,p)
   end
   say(6,"found catnip!")
+  cell.icon=0
  elseif cell.icon == 4 then
   pulses={}
   pulse_time=time()
