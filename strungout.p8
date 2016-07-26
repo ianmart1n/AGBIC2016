@@ -92,20 +92,15 @@ function _init()
      end
     end
     end
+    say(4,"beep boop im a satellite")
    end
   elseif cell.icon == 5 then
    cell.interact = function()
-    cat.talk.icon=cat.cell.icon
-    cat.talk.txt = "yo waddup"
-    cat.talk.txt2=""
-    cat.talk.time=time()
+    say(cat.cell.icon,"yo waddup")
    end
   else
    cell.interact = function()
-    cat.talk.icon=6
-    cat.talk.txt = "nothing interesting"
-    cat.talk.txt2=""
-    cat.talk.time=time()
+    say(6,"nothing interesting here")
    end
   end
   
@@ -580,6 +575,13 @@ end
 
 function _update()
  scenes[scenes.current].u()
+end
+
+function say(i,s)
+ cat.talk.icon=i
+ cat.talk.txt =s
+ cat.talk.txt2=""
+ cat.talk.time=time() 
 end
 
 function _draw()
