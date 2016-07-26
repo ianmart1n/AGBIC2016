@@ -152,6 +152,7 @@ function _init()
  cat.nip=5
  cat.nipw1=false
  cat.nipw2=false
+ cat.pw=false
  cat.v_a=0
  cat.v_p=0
  cat.s = 0.33
@@ -550,6 +551,19 @@ function _init()
   end
   
   cat.cell=cmin
+  
+  -- out of bounds warning
+  if cat.p[1]+64 < -33*cell_full
+  or cat.p[2]+64 < -33*cell_full
+  or cat.p[1]+64 > 33*cell_full
+  or cat.p[2]+64 > 33*cell_full then
+   if not cat.pw then
+    cat.pw=true
+    say(6,"i should head back")
+   end
+  else
+   cat.pw=false
+  end
  end
  
  game.d=function()
