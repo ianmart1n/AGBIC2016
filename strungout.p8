@@ -73,8 +73,6 @@ function _init()
  end
  end
  
- pulses={}
- 
  bg={}
  for x=0,127+cell_gap,cell_gap do
   bg[x]={}
@@ -363,6 +361,8 @@ function _init()
   for i=1,5 do
    pal(palette.a[1][i],palette.a[palette.c][i])
   end
+  
+  music(0,0,1+2+4)
  end
  palette.set(dget(1))
  
@@ -778,10 +778,11 @@ function cell_interact(cell)
   say(6,"found some space catnip!")
   cell.icon=0
  elseif cell.icon == 4 then
+  pulses={}
   pulse_time=time()
   local i=0
-  for s=max(-32,cell.x-2),min(32,cell.x+2) do
-  for t=max(-32,cell.y-2),min(32,cell.y+2) do
+  for s=max(-32,cell.x-3),min(32,cell.x+3) do
+  for t=max(-32,cell.y-3),min(32,cell.y+3) do
    i+=1
    if cells[s][t].icon ==4 then
     if s!=0 or t!= 0 then
@@ -795,7 +796,6 @@ function cell_interact(cell)
    end
   end
   end
-  cell.icon=0
   say(4,"beep boop im a satellite")
  elseif cell.icon == 5 then
   say(cat.cell.icon,"yo waddup")
@@ -1171,7 +1171,7 @@ __sfx__
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __music__
-00 00010407
+01 00010407
 00 00020508
 00 00030609
 00 000a0407
@@ -1193,7 +1193,9 @@ __music__
 00 00273830
 00 00280104
 00 00020508
-00 00030609
+02 00030609
+00 41424344
+00 41424344
 00 41424344
 00 41424344
 00 41424344
@@ -1217,8 +1219,6 @@ __music__
 00 41424344
 00 41424344
 00 41304344
-00 41424344
-00 41424344
 00 41424344
 00 41424344
 00 41424344
