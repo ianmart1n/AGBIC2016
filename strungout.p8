@@ -65,6 +65,7 @@ function _init()
  cell_space=5 -- only cells divisible by cell_space can contain stuff
  map_size=31 -- distance in either direction from center
  nip_drain = 0.001 --speed at which catnip drains
+ nip_drain_build = 0.001 --nip_drain increase on each nip pickup
  empty_chance = 0.25 --chance for cells to spawn empty
  a_speed=0.01 --rotation speed
  p_speed=0.75 --movement speed
@@ -868,6 +869,7 @@ function cell_interact(cell)
    add(parts,p)
   end
   say(cell.icon,"found some space catnip!")
+  nip_drain+=nip_drain_build
   cell.icon=interactions.empty
  elseif cell.icon == interactions.sat then
   if not cell.used then
