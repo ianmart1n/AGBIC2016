@@ -431,34 +431,69 @@ add_interaction(7,"blue","don't you want to be free?")
  
  -- menu scene
  local menu={}
- 
+ menu.o1=0
+ menu.o2=0
  menu.u=function()
   if btn(4) and btn(5) then scenes.current="game" end
   if btnp(0) then palette.set(palette.c-1) end
   if btnp(1) then palette.set(palette.c+1) end
+ 
+  if btnp(2) then menu.o1-=1 end
+  if btnp(3) then menu.o1+=1 end
+  menu.o1 = mid(-1,menu.o1,1)
+  menu.o2=lerp(menu.o2,menu.o1,0.1)
  end
  
  menu.d=function()
   camera(0,0)
+  color(0)
+  for i=0,99 do
+   line(rnd(127),0,rnd(127),127)
+   line(0,rnd(127),127,rnd(127))
+  end
+  
+  camera(0,menu.o2*127+flr(sin(time()/10)*5+0.5)+16)
+  sspr(96,0,30,30,64-15,64-15)
+  color(12)
+  print_ol("\143 \143 in heaven's high \143 \143",10,80,0,12)
+  print_ol("press z+x to start",28,90,0,12)
+  
+  camera(0,menu.o2*127)
+  
+  if btn(3) then
+   print_ol("\131 back",1,-25,12,0)
+   print_ol("\131 instructions",1,102,12,0)
+  else
+   print_ol("\131 back",1,-25,0,12)
+   print_ol("\131 instructions",1,102,0,12)
+  end
+  if btn(2) then
+   print_ol("\148 credits",1,5,12,0)
+   print_ol("\148 back",1,132,12,0)
+  else
+   print_ol("\148 credits",1,5,0,12)
+   print_ol("\148 back",1,132,0,12)
+  end
+  
+  color(12)
+  sspr(80,0,16,16,56,-100)
+  print_ol("strung out on heaven's high\nwas made by sean & ian\nfor a game by its cover (#agbic)\nbased on a famicase entry\nby daruma studio",1,-72,0,12)
+  print_ol("\nyou are the action cat\n\nhow to play:\n\n \139+\145: turn\n \148+\131: move\nz or x: interact\n\nfind nip to keep the trip going\nuse satellites as landmarks\nprepare your final report",1,142,0,12)
+  sspr(16,0,48,16,40,216)
+  
+  camera(0,0)
   color(12)
   rectfill(0,111,127,127)
   color(0)
-  rectfill(0,0,127,110)
   circfill(10,119,7)
   print("\139 "..palette.a[palette.c][6].." \145",52-#palette.a[palette.c][6]/2*4,117)
-  
   color(12)
   circfill(10,119,2)
   for i=1,palette.c do
    local a = -i/#palette.a+0.2
    pset(10.5+cos(a)*5,119.5+sin(a)*5,7)
   end
- 
-  camera(0,flr(sin(time()/10)*5+0.5))
-  sspr(96,0,30,30,64-15,64-15)
-  color(12)
-  print("\143 \143 in heaven's high \143 \143",10,80)
-  print("press z+x to start",28,90)
+
  end
  
  local over={}
