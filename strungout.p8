@@ -95,6 +95,7 @@ function _init()
  
  add_interaction(6,"good","i'm happy. hope you're happy, too.")
  add_interaction(6,"good","moondust will cover you.")
+	add_interaction(6,"good","it's safe out here.")
 
  add_interaction(8,"bad","hitting an all-time low?")
  add_interaction(8,"bad","they don't realize you're alive.")
@@ -102,10 +103,11 @@ function _init()
 
  add_interaction(7,"bad","oh, no. not again.")
  add_interaction(7,"bad","i'll never be free.")
+ add_interaction(7,"bad","there's nothing here for me.")
 
  add_interaction(4,"bad","the shrieking of nothing is killing me.")
  add_interaction(4,"bad","this chaos is killing me.")
- add_interaction(4,"bad","it's so hard to focus.")
+ add_interaction(4,"bad","let me go home.")
 
  add_interaction(9,"good","i've heard a rumour from ground control.")
  add_interaction(9,"good","i'm coming home.")
@@ -124,22 +126,25 @@ function _init()
  add_interaction(12,"good","i can still see earth from here.")
  add_interaction(12,"good","things aren't so scary right now.")
 
- add_interaction(13,"bad","this tin can is barely functioning.")
- add_interaction(13,"bad","what if i just drift out here forever?")
- add_interaction(13,"bad","i don't think i can come down.")
- add_interaction(13,"bad","this is the worst trip i've ever been on.")
+ add_interaction(13,"good","the ship is holding out pretty well.")
+ add_interaction(13,"good","plenty of supplies here for me.")
+ add_interaction(13,"good","lots of interesting readings out here.")
 
  add_interaction(14,"good","be sweet, sweet dove.")
  add_interaction(14,"good","hello spaceboy.")
  add_interaction(14,"good","maybe everything is going to be fine.")
 
- add_interaction(15,"bad","the stars go on forever.")
- add_interaction(15,"bad","i have this overwhelming feeling inside me.")
- add_interaction(15,"bad","let me go home.")
+ add_interaction(15,"blue","the stars go on forever.")
+ add_interaction(15,"blue","i have this overwhelming feeling inside me.")
+ add_interaction(15,"blue","don't you want to be free?")
 
  add_interaction(16,"blue","just another piece of space junk.")
  add_interaction(16,"blue","maybe this means something.")
  add_interaction(16,"blue","why does this remind me of home?")
+
+	add_interaction(17,"bad","i'm not getting a signal.")
+ add_interaction(17,"bad","ground control? are you there?")
+ add_interaction(17,"bad","this is the worst trip i've ever been on.")
 
  add_interaction(5,"blue","i ain't got no money.")
  add_interaction(5,"blue","send me up a drink.")
