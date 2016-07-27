@@ -60,7 +60,18 @@ function _init()
  cartdata("sweetheartsquad_strungout")
  scenes={}
  
+ -- scale vars
+ cell_gap=24 -- distance between cells
+ cell_space=5 -- only cells divisible by cell_space can contain stuff
+ map_size=31 -- distance in either direction from center
+ nip_drain = 0.001 --speed at which catnip drains
  empty_chance = 0.25 --chance for cells to spawn empty
+ a_speed=0.01 --rotation speed
+ p_speed=0.75 --movement speed
+ 
+ cell_gap_h=cell_gap/2
+ cell_full=cell_gap*cell_space
+ 
  interactions={}
  interactions.empty=0
  interactions.cat=1
@@ -88,12 +99,6 @@ function _init()
  add_interaction(7,"misc","nothing interesting here")
  
  -- cells
- cell_gap=24 -- distance between cells
- cell_gap_h=cell_gap/2
- cell_space=5 -- only cells divisible by cell_space can contain stuff
- cell_full=cell_gap*cell_space
- map_size=31 -- distance in either direction from center
- 
  cells={}
  for x=-map_size,map_size do
   cells[x]={}
@@ -534,13 +539,13 @@ function _init()
  game.u=function()
  
   -- input
-  if btn(0) then cat.v_a += 0.01 end
-  if btn(1) then cat.v_a -= 0.01 end
-  if btn(2) then cat.v_p -= 0.75 end
-  if btn(3) then cat.v_p += 0.25 end
+  if btn(0) then cat.v_a += a_speed end
+  if btn(1) then cat.v_a -= a_speed end
+  if btn(2) then cat.v_p -= p_speed end
+  if btn(3) then cat.v_p += p_speed/3 end
   
   --catnip
-  cat.nip -= 0.001
+  cat.nip -= nip_drain
   
   cat.nip=min(cat.nip,10)
   
