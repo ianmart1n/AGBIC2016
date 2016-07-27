@@ -58,10 +58,12 @@ function _init()
  cell_gap_h=cell_gap/2
  cell_space=5 -- only cells divisible by cell_space can contain stuff
  cell_full=cell_gap*cell_space
+ map_size=31 -- distance in either direction from center
+ 
  cells={}
- for x=-32,32 do
+ for x=-map_size,map_size do
   cells[x]={}
- for y=-32,32 do
+ for y=-map_size,map_size do
   local cell={}
   cell.icon=flr(rnd(6))
   cell.x=x
@@ -644,8 +646,8 @@ function _init()
    -- check for actual cells
    if t%1==0 and
       s%1 == 0 and
-      t == mid(-32,t,32) and 
-      s == mid(-32,s,32) 
+      t == mid(-map_size,t,map_size) and 
+      s == mid(-map_size,s,map_size) 
    then
     p.cell = cells
     [flr(t)]
@@ -668,10 +670,10 @@ function _init()
   cat.cell=cmin
   
   -- out of bounds warning
-  if cat.p[1]+64 < -33*cell_full
-  or cat.p[2]+64 < -33*cell_full
-  or cat.p[1]+64 > 33*cell_full
-  or cat.p[2]+64 > 33*cell_full then
+  if cat.p[1]+64 < -(map_size+1)*cell_full
+  or cat.p[2]+64 < -(map_size+1)*cell_full
+  or cat.p[1]+64 > (map_size+1)*cell_full
+  or cat.p[2]+64 > (map_size+1)*cell_full then
    if not cat.pw then
     cat.pw=true
     say(6,"i should head back")
@@ -793,9 +795,9 @@ function cell_interact(cell)
  elseif cell.icon == 4 then
   pulse_time=time()
   local i=0
-  local num=#pulses
-  for s=max(-32,cell.x-2),min(32,cell.x+2) do
-  for t=max(-32,cell.y-2),min(32,cell.y+2) do
+  local num=0
+  for s=max(-map_size,cell.x-2),min(map_size,cell.x+2) do
+  for t=max(-map_size,cell.y-2),min(map_size,cell.y+2) do
    i+=1
    if cells[s][t].icon ==4 then
     if s!=0 or t!= 0 then
