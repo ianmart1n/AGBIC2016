@@ -49,6 +49,13 @@ function v_lerp(_a,_b,_t)
  return{lerp(_a[1],_b[1],_t),lerp(_a[2],_b[2],_t)}
 end
 
+function add_interaction(i,v,txt)
+ local interaction={}
+ interaction.txt=txt
+ interaction.v=v
+ add(interactions.a[i],interaction)
+end
+
 function _init()
  cartdata("sweetheartsquad_strungout")
  scenes={}
@@ -60,8 +67,25 @@ function _init()
  interactions.sat=3
  interactions.rmin=2
  interactions.rmax=7
+ interactions.a={}
+ for i=0,interactions.rmax do
+  interactions.a[i]={}
+ end
  
-
+ add_interaction(0,"misc","nothing interesting here")
+ add_interaction(1,"misc","nothing interesting here")
+ add_interaction(2,"misc","nothing interesting here")
+ add_interaction(3,"misc","nothing interesting here")
+ 
+ add_interaction(4,"good","this is a good thing")
+ add_interaction(4,"bad","this is a bad thing")
+ add_interaction(4,"blue","this is a blue thing")
+ add_interaction(4,"misc","this is just a thing")
+ 
+ add_interaction(5,"misc","nothing interesting here")
+ add_interaction(6,"misc","nothing interesting here")
+ add_interaction(7,"misc","nothing interesting here")
+ 
  -- cells
  cell_gap=24 -- distance between cells
  cell_gap_h=cell_gap/2
@@ -78,7 +102,7 @@ function _init()
   cell.x=x
   cell.y=y
   cell.used=false
-  cell.interact=cell_interact
+  cell.interact=interactions.a[cell.icon][flr(rnd()*#interactions.a[cell.icon])+1]
   
   cells[x][y]=cell
  end
@@ -492,6 +516,7 @@ function _init()
  game.details.good=0
  game.details.bad=0
  game.details.blue=0
+ game.details.misc=0
  game.u=function()
  
   -- input
@@ -532,7 +557,7 @@ function _init()
   
   if btnp(4) or btnp(5) then
    if cat.cell != nil then
-    cat.cell.interact(cat.cell)
+    cell_interact(cat.cell)
    end
   end
   
@@ -841,12 +866,9 @@ function cell_interact(cell)
   else
    say(cell.icon,"ground control:\n"..num.." inactive satellites within range")
   end
-  
-  cell.used=true
- elseif cell.icon == 5 then
-  say(cat.cell.icon,"yo waddup")
  else
-  say(interactions.cat,"nothing interesting here")
+  say(cell.icon,cell.interact.txt)
+  game.details[cell.interact.v]+=1
  end
  cell.used = true
 end
