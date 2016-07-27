@@ -68,6 +68,8 @@ function _init()
  nip_drain_build = 0.001 --nip_drain increase on each nip pickup
  nip_gain = 10 --nip gained from pickups
  empty_chance = 0.25 --chance for cells to spawn empty
+ sat_chance = 0.1 --chance for cells to spawn empty
+ nip_chance = 0.1 --chance for cells to spawn empty
  a_speed=0.01 --rotation speed
  p_speed=0.75 --movement speed
  
@@ -149,10 +151,16 @@ function _init()
   cells[x]={}
  for y=-map_size,map_size do
   local cell={}
-  cell.icon=flr(rnd(interactions.rmax-interactions.rmin))+interactions.rmin
-  if rnd() < empty_chance then
+  cell.icon=flr(rnd(interactions.rmax-interactions.rmin))+interactions.rmin+1
+  local r=rnd()
+  if r < empty_chance then
    cell.icon = interactions.empty
+  elseif r-empty_chance < sat_chance then
+   cell.icon = interactions.sat
+  elseif r-empty_chance-sat_chance < nip_chance then
+   cell.icon = interactions.nip
   end
+  
   
   cell.x=x
   cell.y=y
