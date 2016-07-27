@@ -69,8 +69,9 @@ function _init()
  nip_drain_build = 0.002 --nip_drain increase on each nip pickup
  nip_gain = 10 --nip gained from pickups
  empty_chance = 0.6 --chance for cells to spawn empty
- sat_chance = 0.1 --chance for cells to spawn empty
- nip_chance = 0.05 --chance for cells to spawn empty
+ sat_chance = 0.1
+ nip_chance = 0.05
+ photo_chance = 0.05
  a_speed=0.01 --rotation speed
  p_speed=0.7 --movement speed
  
@@ -165,6 +166,8 @@ function _init()
    cell.icon = interactions.sat
   elseif r-empty_chance-sat_chance < nip_chance then
    cell.icon = interactions.nip
+  elseif r-empty_chance-sat_chance-nip_chance < photo_chance then
+   cell.icon = interactions.photo
   end
   
   
@@ -535,8 +538,10 @@ function _init()
   color(12)
   sspr(80,0,16,16,56,-100)
   print_ol("strung out on heaven's high\nwas made by sean & ian\nfor a game by its cover (#agbic)\nbased on a famicase entry\nby daruma studio",1,-72,0,12)
-  print_ol("\nyou are the action cat\n\nhow to play:\n\n \139+\145: turn\n \148+\131: move\nz or x: interact\n\nfind nip to keep the trip going\nuse satellites as landmarks\nprepare your final report",1,142,0,12)
-  sspr(16,0,48,16,40,216)
+  print_ol("\nyou are the action cat\n\nhow to play:\n\n \139+\145: turn\n \148+\131: move\nz or x: interact\n\nfind nip to keep the trip going\nuse satellites as landmarks\ncollect photos of the past",1,142,0,12)
+  sspr(16*2,0,16,16,40,216)
+  sspr(16*3,0,16,16,56,216)
+  sspr(16*4,16,16,16,72,216)
   
   camera(0,0)
   color(12)
@@ -967,25 +972,23 @@ function cell_interact(cell)
   --empty cell
  elseif cell.icon == interactions.nip then
   cat.nip+=nip_gain
+  game.details.bad+=1
   cam.p[1] += rnd(15)-rnd(15)
   cam.p[2] += rnd(15)-rnd(15)
   
-  for i=0,1,0.05 do
-   
-   local p=entity(cat.p[1]+25*cos(i)+64,cat.p[2]+25*sin(i)+64,12)
-   p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
-   
-   p.s=rnd(5)+5
-   p.draw=function(p)
-    cam.push(p)
-    circ(0,0,p.s)
-    cam.pop()
-   end
-   
-   add(parts,p)
-  end
+  add_pop()
+  
   say(cell.icon,"found some space catnip!")
   nip_drain+=nip_drain_build
+  cell.icon=interactions.empty
+ elseif cell.icon == interactions.photo then
+  game.details.blue+=1
+  cam.p[1] += rnd(15)-rnd(15)
+  cam.p[2] += rnd(15)-rnd(15)
+  
+  add_pop()
+  
+  say(cell.icon,cell.interact.txt)
   cell.icon=interactions.empty
  elseif cell.icon == interactions.sat then
   if not cell.used then
@@ -1027,6 +1030,22 @@ function cell_interact(cell)
   end
  end
  cell.used = true
+end
+
+function add_pop()
+ for i=0,1,0.05 do 
+  local p=entity(cat.p[1]+25*cos(i)+64,cat.p[2]+25*sin(i)+64,12)
+  p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
+   
+  p.s=rnd(5)+5
+  p.draw=function(p)
+   cam.push(p)
+   circ(0,0,p.s)
+   cam.pop()
+  end
+   
+  add(parts,p)
+ end
 end
 
 function _draw()
