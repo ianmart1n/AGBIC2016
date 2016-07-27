@@ -57,6 +57,7 @@ function add_interaction(i,v,txt)
 end
 
 function _init()
+ cls()
  cartdata("sweetheartsquad_strungout")
  scenes={}
  
