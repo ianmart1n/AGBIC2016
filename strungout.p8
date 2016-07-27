@@ -450,11 +450,18 @@ function _init()
    
    
    over.over=true
+   over.last=0
   end
+  
   if time()-over.time > #over.txt then
    if btn(4) and btn(5) then
     run()
    end
+  elseif time()-over.time > over.last then
+   if over.txt[over.last] != "" then
+    sfx(63,3)
+   end
+   over.last+=1
   end
  end
  
