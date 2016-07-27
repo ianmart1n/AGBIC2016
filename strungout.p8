@@ -83,6 +83,7 @@ function _init()
  interactions.cat=1
  interactions.nip=2
  interactions.sat=3
+ interactions.photo=10
  interactions.rmin=2
  interactions.rmax=18
  interactions.a={}
