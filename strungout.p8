@@ -868,7 +868,9 @@ function cell_interact(cell)
   end
  else
   say(cell.icon,cell.interact.txt)
-  game.details[cell.interact.v]+=1
+  if not cell.used then
+   game.details[cell.interact.v]+=1
+  end
  end
  cell.used = true
 end
