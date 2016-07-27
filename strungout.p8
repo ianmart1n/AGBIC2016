@@ -454,12 +454,23 @@ add_interaction(7,"blue","don't you want to be free?")
   end
   
   camera(0,menu.o2*127+flr(sin(time()/10)*5+0.5)+16)
-  sspr(96,0,30,30,64-15,64-15)
+  
+  sspr(96,0,30,30,64-14,64-15)
   color(12)
-  print_ol("\143 \143 in heaven's high \143 \143",10,80,0,12)
+  print_ol("\143 \143 in heaven's high \143 \143",9,80,0,12)
   print_ol("press z+x to start",28,90,0,12)
   
   camera(0,menu.o2*127)
+  
+  color(15)
+  line(5,20,10,20)
+  line(5,90,10,90)
+  line(122,20,117,20)
+  line(122,90,117,90)
+  line(5,20,5,25)
+  line(5,90,5,85)
+  line(122,20,122,25)
+  line(122,90,122,85)
   
   if btn(3) then
    print_ol("\131 back",1,-25,12,0)
