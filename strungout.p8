@@ -651,12 +651,16 @@ function _init()
   
   cat.a += cat.v_a
   
-  cat.p[1] += cos(cat.a-0.25)*cat.v_p
-  cat.p[2] += sin(cat.a-0.25)*cat.v_p
+  local ca=cos(cat.a-0.25)
+  local sa=sin(cat.a-0.25)
+  cat.p[1] += ca*cat.v_p
+  cat.p[2] += sa*cat.v_p
   
   cat_mesh.s=1+sin(time())/10
   
   local d={cam.p[1],cam.p[2]}
+  cam.p = v_lerp(cam.p, v_add(cat.p,{ca*-32,sa*-32}), 0.1)
+  
   cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
   cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
   d = v_sub(cam.p,d)
