@@ -120,6 +120,10 @@ function _init()
  add_interaction(10,"blue","a picture of home.")
  add_interaction(10,"blue","a picture of ground control.")
  add_interaction(10,"blue","a picture of something familiar.")
+ add_interaction(10,"blue","a picture of a guitar.")
+ add_interaction(10,"blue","a picture of a bag of catnip.")
+ add_interaction(10,"blue","a picture of my old spaceship.")
+ add_interaction(10,"blue","a picture of my parent's house.")
 
  add_interaction(11,"blue","where did this come from?")
  add_interaction(11,"blue","some trinket from a world beyond.")
@@ -483,7 +487,7 @@ function _init()
  menu.u=function()
   if btn(4) and btn(5) then
    scenes.current="game"
-   say(interactions.cat,"no reply from ground control. i could use a fix.")
+   say(interactions.cat,"i'll stay clean tonight. just one last trip...")
   end
   if btnp(0) then palette.set(palette.c-1) end
   if btnp(1) then palette.set(palette.c+1) end
@@ -675,7 +679,7 @@ function _init()
   if cat.nip < 2 then
    if not cat.nipw2 then
     cat.nipw2 = true
-    say(interactions.cat,"nip's hitting an alltime low!")
+    say(interactions.cat,"fading fast - need nip!")
    end
   else
    cat.nipw2 = false
