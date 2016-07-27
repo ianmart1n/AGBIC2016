@@ -670,7 +670,7 @@ function _init()
    end
    
    -- distort based on speed
-   p.r = p.r/8*cat.v_p
+   p.r = p.r/8*cat.v_p*cat.nip/5
   end
   end
   
