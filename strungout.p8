@@ -467,8 +467,9 @@ add_interaction(7,"blue","don't you want to be free?")
  over.u=function()
   if not over.over then
    over.time=time()
-   add(over.txt,"game over")
-   add(over.txt,"sordid details following:")
+   add(over.txt,"-- action cat to ground control")
+   add(over.txt,"-- transmission starting...")
+   add(over.txt,"-- sordid details following:")
    add(over.txt,"")
    
    if game.details.good == 0 then
@@ -518,6 +519,8 @@ add_interaction(7,"blue","don't you want to be free?")
     add(over.txt,"and there's nothing i can do")
    end
    add(over.txt,"")
+   add(over.txt,"-- transmission ended")
+   add(over.txt,"-- action cat signed off")
    add(over.txt,"")
    add(over.txt,"")
    add(over.txt,"press z+x to restart")
@@ -543,7 +546,7 @@ add_interaction(7,"blue","don't you want to be free?")
   camera(0,0)
   color(0)
   rectfill(0,0,127,127)
-  color(7)
+  color(12)
   for i=1,#over.txt do
    if time()-over.time > i then
     print(over.txt[i],1,i*6)
