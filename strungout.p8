@@ -802,11 +802,6 @@ add_interaction(7,"blue","don't you want to be free?")
   
   cat.draw(cat)
   
-  color(12)
-  for p in all(parts) do
-   p.draw(p)
-  end
-  
   cam.pop()
   
   draw_icons()
@@ -825,6 +820,11 @@ add_interaction(7,"blue","don't you want to be free?")
    end
   end
   
+  color(12)
+  for p in all(parts) do
+   p.draw(p)
+  end
+  
   draw_talk()
  
   --draw_debug() 
@@ -838,6 +838,20 @@ add_interaction(7,"blue","don't you want to be free?")
   
  say(interactions.cat,"no reply from ground control. i could use a fix.")
  music(0,0,1+2+4)
+ 
+ -- transition
+ for y=0,127 do
+   local p=entity(cat.p[1],cat.p[2]+y,0)
+   p.d={0,0}
+   
+   p.s=rnd()
+   p.draw=function(p)
+    color(0)
+    line(cam.p[1],cam.p[2]+p.p[2],cam.p[1]+127,cam.p[2]+p.p[2])
+   end
+   
+   add(parts,p)
+ end
 end
 
 function _update()
@@ -864,7 +878,7 @@ function cell_interact(cell)
   
   for i=0,1,0.05 do
    
-   local p=entity(cat.p[1]+25*cos(i),cat.p[2]+25*sin(i),12)
+   local p=entity(cat.p[1]+25*cos(i)+64,cat.p[2]+25*sin(i)+64,12)
    p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
    
    p.s=rnd(5)+5
