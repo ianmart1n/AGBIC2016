@@ -66,6 +66,7 @@ function _init()
  map_size=31 -- distance in either direction from center
  nip_drain = 0.001 --speed at which catnip drains
  nip_drain_build = 0.001 --nip_drain increase on each nip pickup
+ nip_gain = 10 --nip gained from pickups
  empty_chance = 0.25 --chance for cells to spawn empty
  a_speed=0.01 --rotation speed
  p_speed=0.75 --movement speed
@@ -857,7 +858,7 @@ function cell_interact(cell)
  if cell.icon == interactions.empty then
   --empty cell
  elseif cell.icon == interactions.nip then
-  cat.nip+=1
+  cat.nip+=nip_gain
   cam.p[1] += rnd(15)-rnd(15)
   cam.p[2] += rnd(15)-rnd(15)
   
