@@ -111,7 +111,7 @@ function _init()
 
  add_interaction(9,"good","i've heard a rumour from ground control.")
  add_interaction(9,"good","i'm coming home.")
- add_interaction(9,"good","it's not too late to me.")
+ add_interaction(9,"good","it's not too late for me.")
  
  add_interaction(10,"blue","a picture of a girl playing a synthesizer.")
  add_interaction(10,"blue","a picture of home.")
