@@ -150,11 +150,9 @@ add_interaction(7,"blue","don't you want to be free?")
  for i=1,sqrt(num_stars) do
  for j=1,sqrt(num_stars) do
   local c=i*j/num_stars
-  if c < 0.25 then
-   c=5
-  elseif c < 0.5 then
+  if c < 0.33 then
    c=15
-  elseif c < 0.75 then
+  elseif c < 0.66 then
    c=12
   else
    c=7
