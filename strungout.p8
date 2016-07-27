@@ -60,6 +60,7 @@ function _init()
  cartdata("sweetheartsquad_strungout")
  scenes={}
  
+ empty_chance = 0.25 --chance for cells to spawn empty
  interactions={}
  interactions.empty=0
  interactions.cat=1
@@ -99,6 +100,10 @@ function _init()
  for y=-map_size,map_size do
   local cell={}
   cell.icon=flr(rnd(interactions.rmax-interactions.rmin))+interactions.rmin
+  if rnd() < empty_chance then
+   cell.icon = interactions.empty
+  end
+  
   cell.x=x
   cell.y=y
   cell.used=false
