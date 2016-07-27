@@ -499,15 +499,22 @@ add_interaction(7,"blue","don't you want to be free?")
    add(over.txt,"")
    
    -- "endings"
-   if game.details.good-game.details.bad > game.details.blue then
+   if game.details.good> game.details.bad + game.details.blue then
+    -- good end
     add(over.txt,"i'm happy")
     add(over.txt,"hope you're happy too")
    elseif game.details.blue > game.details.bad+game.details.good then
+    -- blue end
     add(over.txt,"strung out in heaven's high")
     add(over.txt,"hitting an all-time low")
-   else
+   elseif game.details.bad > game.details.good+game.details.blue then
+    -- bad end
     add(over.txt,"the shrieking of nothing")
     add(over.txt,"is killing me")
+   else
+    -- neutral end
+    add(over.txt,"i'm floating around my tin can")
+    add(over.txt,"and there's nothing i can do")
    end
    add(over.txt,"")
    add(over.txt,"")
