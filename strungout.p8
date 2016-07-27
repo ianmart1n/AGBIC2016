@@ -434,7 +434,10 @@ add_interaction(7,"blue","don't you want to be free?")
  menu.o1=0
  menu.o2=0
  menu.u=function()
-  if btn(4) and btn(5) then scenes.current="game" end
+  if btn(4) and btn(5) then
+   scenes.current="game"
+   say(interactions.cat,"no reply from ground control. i could use a fix.")
+  end
   if btnp(0) then palette.set(palette.c-1) end
   if btnp(1) then palette.set(palette.c+1) end
  
@@ -874,7 +877,6 @@ add_interaction(7,"blue","don't you want to be free?")
  scenes.current = "menu"
  
   
- say(interactions.cat,"no reply from ground control. i could use a fix.")
  music(0,0,1+2+4)
  
  -- transition
