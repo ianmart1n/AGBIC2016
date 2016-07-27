@@ -675,7 +675,7 @@ function _init()
   end
   
   -- higher=bouncier scale
-  cat.s=0.3+(sin(time())+1)*0.01*cat.nip
+  cat.s=0.3+(sin(time())+1)*0.03*max(0,cat.nip-7)
   
   if btnp(4) or btnp(5) then
    if cat.cell != nil then
