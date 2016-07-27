@@ -887,6 +887,9 @@ function draw_debug()
  print_ol("cpu:"..stat(1),60,120,0,7)
   
  print_ol("nip:"..cat.nip,1,20,0,7)
+ print_ol("good:"..game.details.good,1,30,0,7)
+ print_ol("bad: "..game.details.bad,1,40,0,7)
+ print_ol("blue:"..game.details.blue,1,50,0,7)
 end
 
 function draw_bg()
