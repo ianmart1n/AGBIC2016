@@ -450,20 +450,29 @@ function _init()
    add(over.txt,"game over")
    add(over.txt,"sordid details following:")
    add(over.txt,"")
+   
    if game.details.good == 0 then
     add(over.txt,"i never done good things")
+   elseif game.details.good == 1 then
+    add(over.txt,"i done one good thing")
    else
     add(over.txt,"i done "..game.details.good.." good things")
    end
    add(over.txt,"")
+   
    if game.details.bad == 0 then
     add(over.txt,"i never done bad things")
+   elseif game.details.bad == 1 then
+    add(over.txt,"i done one bad thing")
    else
     add(over.txt,"i done "..game.details.bad.." bad things")
    end
    add(over.txt,"")
+   
    if game.details.blue == 0 then
     add(over.txt,"i never did anything")
+   elseif game.details.blue == 1 then
+    add(over.txt,"i one thing")
    else
     add(over.txt,"i did "..game.details.blue.." things")
    end
