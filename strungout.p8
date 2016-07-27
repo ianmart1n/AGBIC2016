@@ -438,8 +438,8 @@ add_interaction(7,"blue","don't you want to be free?")
   if btnp(0) then palette.set(palette.c-1) end
   if btnp(1) then palette.set(palette.c+1) end
  
-  if btnp(2) then menu.o1-=1 end
-  if btnp(3) then menu.o1+=1 end
+  if btnp(2) then menu.o1-=1 sfx(63,3) end
+  if btnp(3) then menu.o1+=1 sfx(63,3) end
   menu.o1 = mid(-1,menu.o1,1)
   menu.o2=lerp(menu.o2,menu.o1,0.1)
  end
