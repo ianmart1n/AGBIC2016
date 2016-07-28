@@ -1005,6 +1005,7 @@ function cell_interact(cell)
  elseif cell.icon == interactions.sat then
   if not cell.used then
    pulse_time=time()
+   game.details.good+=1
   end
   local i=0
   local num=0
