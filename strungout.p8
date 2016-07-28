@@ -65,13 +65,14 @@ function _init()
  cell_gap=24 -- distance between cells
  cell_space=3 -- only cells divisible by cell_space can contain stuff
  map_size=31 -- distance in either direction from center
- nip_drain = 0.003 --speed at which catnip drains
- nip_drain_build = 0.002 --nip_drain increase on each nip pickup
+ nip_drain = 0.005 --speed at which catnip drains
+ nip_drain_build = 0.003 --nip_drain increase on each nip pickup
  nip_gain = 10 --nip gained from pickups
+ initial_nip = 7.5
  empty_chance = 0.6 --chance for cells to spawn empty
  sat_chance = 0.1
  nip_chance = 0.05
- photo_chance = 0.05
+ photo_chance = 0.025
  a_speed=0.01 --rotation speed
  p_speed=0.7 --movement speed
  
@@ -266,7 +267,7 @@ function _init()
  
  -- player
  cat=entity(0,0,7)
- cat.nip=6
+ cat.nip=initial_nip
  cat.nipw1=false
  cat.nipw2=false
  cat.pw=false
