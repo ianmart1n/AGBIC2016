@@ -485,11 +485,26 @@ function _init()
   end
   palette.c=flr((v-1)%#palette.a+1)
   dset(1,palette.c)
+  
+  --random
   if palette.c==#palette.a then
-   local a={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+   local a={}
    for i=1,5 do
-    palette.a[palette.c][i] = a[flr(rnd()*#a+0.5)]
-    del(a,palette.a[palette.c][i])
+    local colour
+    local valid=false
+    while not valid do
+     valid=true
+     colour=flr(rnd(16))
+     for j in all(a) do
+      if colour==j then
+       valid=false
+       break
+      end
+     end
+    end
+    
+    palette.a[palette.c][i] = colour
+    add(a,colour)
    end
   end
   
