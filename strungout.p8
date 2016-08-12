@@ -498,7 +498,14 @@ function _init()
   end
   
  end
- palette.set(dget(1))
+ 
+ 
+ local saved_palette=dget(1)
+ -- make sure we don't boot with random palette
+ if saved_palette==0 or saved_palette==#palette.a then
+  saved_palette=1
+ end
+ palette.set(saved_palette)
  
  -- menu scene
  local menu={}
