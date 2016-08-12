@@ -1126,7 +1126,6 @@ function draw_icons()
    
    -- selected cell
    if s.cell == cat.cell then
-    color(12)
     pal(7,palette.a[palette.c][4])
     for c=x+cell_gap_h-1-8,x+cell_gap_h+1-8 do
     for d=y+cell_gap_h-1-8,y+cell_gap_h+1-8 do
