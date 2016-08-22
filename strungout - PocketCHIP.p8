@@ -5,51 +5,51 @@ __lua__
 -- made by sean & ian for #agbic
 -- inspired by daruma studio's famicase
 
-function entity(_x,_y,_c)
+function entity(vx,vy,vc)
  local e={}
  e.p={}
- e.p[1]=_x
- e.p[2]=_y
+ e.p[1]=vx
+ e.p[2]=vy
  e.a=0
  e.s=1
- e.c=_c
+ e.c=vc
  e.children={}
  return e
 end
 
-function vectorize(_e)
- _e.points={}
- _e.draw=draw_vector
- return _e
+function vectorize(ve)
+ ve.points={}
+ ve.draw=drawvvector
+ return ve
 end
 
-function lerp(_from,_to,_t)
- return _from+_t*(_to-_from)
+function lerp(vfrom,vto,vt)
+ return vfrom+vt*(vto-vfrom)
 end
 
-function rotate(_p,_a)
- local ca=cos(_a)
- local sa=sin(_a)
+function rotate(vp,va)
+ local ca=cos(va)
+ local sa=sin(va)
  local p={}
- p[1] = ca*_p[1]-sa*_p[2]
- p[2] = sa*_p[1]+ca*_p[2]
+ p[1] = ca*vp[1]-sa*vp[2]
+ p[2] = sa*vp[1]+ca*vp[2]
  return p
 end
 
-function v_add(_a,_b)
- return {_a[1]+_b[1],_a[2]+_b[2]}
+function vvadd(va,vb)
+ return {va[1]+vb[1],va[2]+vb[2]}
 end
-function v_sub(_a,_b)
- return {_a[1]-_b[1],_a[2]-_b[2]}
+function vvsub(va,vb)
+ return {va[1]-vb[1],va[2]-vb[2]}
 end
-function v_mul(_v,_s)
- return {_v[1]*_s,_v[2]*_s}
+function vvmul(vv,vs)
+ return {vv[1]*vs,vv[2]*vs}
 end
-function v_lerp(_a,_b,_t)
- return{lerp(_a[1],_b[1],_t),lerp(_a[2],_b[2],_t)}
+function vvlerp(va,vb,vt)
+ return{lerp(va[1],vb[1],vt),lerp(va[2],vb[2],vt)}
 end
 
-function add_interaction(i,v,txt)
+function addvinteraction(i,v,txt)
  local interaction={}
  interaction.txt=txt
  interaction.v=v
@@ -58,26 +58,26 @@ end
 
 function _init()
  cls()
- cartdata("sweetheartsquad_strungout")
+ cartdata("sweetheartsquadvstrungout")
  scenes={}
  
  -- scale vars
- cell_gap=24 -- distance between cells
- cell_space=3 -- only cells divisible by cell_space can contain stuff
- map_size=31 -- distance in either direction from center
- nip_drain = 0.005 --speed at which catnip drains
- nip_drain_build = 0.003 --nip_drain increase on each nip pickup
- nip_gain = 10 --nip gained from pickups
- initial_nip = 7.5
- empty_chance = 0.6 --chance for cells to spawn empty
- sat_chance = 0.1
- nip_chance = 0.05
- photo_chance = 0.025
- a_speed=0.01 --rotation speed
- p_speed=0.7 --movement speed
+ cellvgap=24 -- distance between cells
+ cellvspace=3 -- only cells divisible by cellvspace can contain stuff
+ mapvsize=31 -- distance in either direction from center
+ nipvdrain = 0.005 --speed at which catnip drains
+ nipvdrainvbuild = 0.003 --nipvdrain increase on each nip pickup
+ nipvgain = 10 --nip gained from pickups
+ initialvnip = 7.5
+ emptyvchance = 0.6 --chance for cells to spawn empty
+ satvchance = 0.1
+ nipvchance = 0.05
+ photovchance = 0.025
+ avspeed=0.01 --rotation speed
+ pvspeed=0.7 --movement speed
  
- cell_gap_h=cell_gap/2
- cell_full=cell_gap*cell_space
+ cellvgapvh=cellvgap/2
+ cellvfull=cellvgap*cellvspace
  
  interactions={}
  interactions.empty=0
@@ -92,106 +92,106 @@ function _init()
   interactions.a[i]={}
  end
  
- add_interaction(0,"misc","nothing interesting here")
- add_interaction(1,"misc","nothing interesting here")
- add_interaction(2,"misc","nothing interesting here")
- add_interaction(3,"misc","nothing interesting here")
+ addvinteraction(0,"misc","nothing interesting here")
+ addvinteraction(1,"misc","nothing interesting here")
+ addvinteraction(2,"misc","nothing interesting here")
+ addvinteraction(3,"misc","nothing interesting here")
  
- add_interaction(6,"good","i'm happy. hope you're happy, too.")
- add_interaction(6,"good","moondust will cover you.")
-	add_interaction(6,"good","it's safe out here.")
+ addvinteraction(6,"good","i'm happy. hope you're happy, too.")
+ addvinteraction(6,"good","moondust will cover you.")
+	addvinteraction(6,"good","it's safe out here.")
 
- add_interaction(8,"bad","hitting an all-time low?")
- add_interaction(8,"bad","they don't realize you're alive.")
- add_interaction(8,"bad","your circuit's dead. there's something wrong.")
- add_interaction(8,"bad","my mama said not to mess with you.")
+ addvinteraction(8,"bad","hitting an all-time low?")
+ addvinteraction(8,"bad","they don't realize you're alive.")
+ addvinteraction(8,"bad","your circuit's dead. there's something wrong.")
+ addvinteraction(8,"bad","my mama said not to mess with you.")
 
- add_interaction(7,"bad","oh, no. not again.")
- add_interaction(7,"bad","i'll never be free.")
- add_interaction(7,"bad","there's nothing here for me.")
+ addvinteraction(7,"bad","oh, no. not again.")
+ addvinteraction(7,"bad","i'll never be free.")
+ addvinteraction(7,"bad","there's nothing here for me.")
 
- add_interaction(4,"bad","the shrieking of nothing is killing me.")
- add_interaction(4,"bad","this chaos is killing me.")
- add_interaction(4,"bad","let me go home.")
+ addvinteraction(4,"bad","the shrieking of nothing is killing me.")
+ addvinteraction(4,"bad","this chaos is killing me.")
+ addvinteraction(4,"bad","let me go home.")
 
- add_interaction(9,"good","i've heard a rumour from ground control.")
- add_interaction(9,"good","i'm coming home.")
- add_interaction(9,"good","it's not too late for me.")
+ addvinteraction(9,"good","i've heard a rumour from ground control.")
+ addvinteraction(9,"good","i'm coming home.")
+ addvinteraction(9,"good","it's not too late for me.")
  
- add_interaction(10,"blue","a picture of a japanese girl in synthesis.")
- add_interaction(10,"blue","a picture of home.")
- add_interaction(10,"blue","a picture of ground control.")
- add_interaction(10,"blue","a picture of something familiar.")
- add_interaction(10,"blue","a picture of a guitar.")
- add_interaction(10,"blue","a picture of a bag of catnip.")
- add_interaction(10,"blue","a picture of my old spaceship.")
- add_interaction(10,"blue","a picture of my parent's house.")
- add_interaction(10,"blue","a picture of someone i barely remember.")
- add_interaction(10,"blue","a picture of a girl i met.")
- add_interaction(10,"blue","a picture of a dark room.")
- add_interaction(10,"blue","a picture of a my friend from back home.")
- add_interaction(10,"blue","a picture of nothing.")
- add_interaction(10,"blue","a picture of a skyline.")
- add_interaction(10,"blue","a picture of a martian spider.")
- add_interaction(10,"blue","a picture of the old band.")
- add_interaction(10,"blue","a picture of a man with a snow white tan.")
- add_interaction(10,"blue","a picture of darkness and disgrace.")
- add_interaction(10,"blue","a picture of a boy in bright blue jeans.")
- add_interaction(10,"blue","a picture of a femme fatale.")
- add_interaction(10,"blue","a picture of shiny silver legwarmers.")
- add_interaction(10,"blue","a picture of sterile skyscrapers.")
- add_interaction(10,"blue","a picture of the last few corpses.")
- add_interaction(10,"blue","a picture of templars and saracens.")
- add_interaction(10,"blue","a picture of a best laid plan.")
+ addvinteraction(10,"blue","a picture of a japanese girl in synthesis.")
+ addvinteraction(10,"blue","a picture of home.")
+ addvinteraction(10,"blue","a picture of ground control.")
+ addvinteraction(10,"blue","a picture of something familiar.")
+ addvinteraction(10,"blue","a picture of a guitar.")
+ addvinteraction(10,"blue","a picture of a bag of catnip.")
+ addvinteraction(10,"blue","a picture of my old spaceship.")
+ addvinteraction(10,"blue","a picture of my parent's house.")
+ addvinteraction(10,"blue","a picture of someone i barely remember.")
+ addvinteraction(10,"blue","a picture of a girl i met.")
+ addvinteraction(10,"blue","a picture of a dark room.")
+ addvinteraction(10,"blue","a picture of a my friend from back home.")
+ addvinteraction(10,"blue","a picture of nothing.")
+ addvinteraction(10,"blue","a picture of a skyline.")
+ addvinteraction(10,"blue","a picture of a martian spider.")
+ addvinteraction(10,"blue","a picture of the old band.")
+ addvinteraction(10,"blue","a picture of a man with a snow white tan.")
+ addvinteraction(10,"blue","a picture of darkness and disgrace.")
+ addvinteraction(10,"blue","a picture of a boy in bright blue jeans.")
+ addvinteraction(10,"blue","a picture of a femme fatale.")
+ addvinteraction(10,"blue","a picture of shiny silver legwarmers.")
+ addvinteraction(10,"blue","a picture of sterile skyscrapers.")
+ addvinteraction(10,"blue","a picture of the last few corpses.")
+ addvinteraction(10,"blue","a picture of templars and saracens.")
+ addvinteraction(10,"blue","a picture of a best laid plan.")
 
- add_interaction(11,"blue","where did this come from?")
- add_interaction(11,"blue","some trinket from a world beyond.")
- add_interaction(11,"blue","i can hear music...")
+ addvinteraction(11,"blue","where did this come from?")
+ addvinteraction(11,"blue","some trinket from a world beyond.")
+ addvinteraction(11,"blue","i can hear music...")
 
- add_interaction(12,"good","drifting through the cosmos feels so freeing.")
- add_interaction(12,"good","i can still see earth from here.")
- add_interaction(12,"good","things aren't so scary right now.")
+ addvinteraction(12,"good","drifting through the cosmos feels so freeing.")
+ addvinteraction(12,"good","i can still see earth from here.")
+ addvinteraction(12,"good","things aren't so scary right now.")
 
- add_interaction(13,"good","the ship is holding out pretty well.")
- add_interaction(13,"good","plenty of supplies here for me.")
- add_interaction(13,"good","lots of interesting readings out here.")
+ addvinteraction(13,"good","the ship is holding out pretty well.")
+ addvinteraction(13,"good","plenty of supplies here for me.")
+ addvinteraction(13,"good","lots of interesting readings out here.")
 
- add_interaction(14,"good","be sweet, sweet dove.")
- add_interaction(14,"good","hello spaceboy.")
- add_interaction(14,"good","maybe everything is going to be fine.")
+ addvinteraction(14,"good","be sweet, sweet dove.")
+ addvinteraction(14,"good","hello spaceboy.")
+ addvinteraction(14,"good","maybe everything is going to be fine.")
 
- add_interaction(15,"blue","the stars go on forever.")
- add_interaction(15,"blue","i have this overwhelming feeling inside me.")
- add_interaction(15,"blue","don't you want to be free?")
+ addvinteraction(15,"blue","the stars go on forever.")
+ addvinteraction(15,"blue","i have this overwhelming feeling inside me.")
+ addvinteraction(15,"blue","don't you want to be free?")
 
- add_interaction(16,"blue","just another piece of space junk.")
- add_interaction(16,"blue","maybe this means something.")
- add_interaction(16,"blue","why does this remind me of home?")
+ addvinteraction(16,"blue","just another piece of space junk.")
+ addvinteraction(16,"blue","maybe this means something.")
+ addvinteraction(16,"blue","why does this remind me of home?")
 
-	add_interaction(17,"bad","i'm not getting a signal.")
- add_interaction(17,"bad","ground control? are you there?")
- add_interaction(17,"bad","this is the worst trip i've ever been on.")
+	addvinteraction(17,"bad","i'm not getting a signal.")
+ addvinteraction(17,"bad","ground control? are you there?")
+ addvinteraction(17,"bad","this is the worst trip i've ever been on.")
 
- add_interaction(5,"blue","i ain't got no money.")
- add_interaction(5,"blue","i ain't got no hair.")
- add_interaction(5,"blue","send me up a drink.")
- add_interaction(5,"blue","give my wife my love.")
+ addvinteraction(5,"blue","i ain't got no money.")
+ addvinteraction(5,"blue","i ain't got no hair.")
+ addvinteraction(5,"blue","send me up a drink.")
+ addvinteraction(5,"blue","give my wife my love.")
 
  -- cells
  cells={}
- for x=-map_size,map_size do
+ for x=-mapvsize,mapvsize do
   cells[x]={}
- for y=-map_size,map_size do
+ for y=-mapvsize,mapvsize do
   local cell={}
   cell.icon=flr(rnd(interactions.rmax-interactions.rmin))+interactions.rmin+1
   local r=rnd()
-  if r < empty_chance then
+  if r < emptyvchance then
    cell.icon = interactions.empty
-  elseif r-empty_chance < sat_chance then
+  elseif r-emptyvchance < satvchance then
    cell.icon = interactions.sat
-  elseif r-empty_chance-sat_chance < nip_chance then
+  elseif r-emptyvchance-satvchance < nipvchance then
    cell.icon = interactions.nip
-  elseif r-empty_chance-sat_chance-nip_chance < photo_chance then
+  elseif r-emptyvchance-satvchance-nipvchance < photovchance then
    cell.icon = interactions.photo
   end
   
@@ -206,9 +206,9 @@ function _init()
  end
  
  bg={}
- for x=0,127+cell_gap,cell_gap do
+ for x=0,127+cellvgap,cellvgap do
   bg[x]={}
- for y=0,127+cell_gap,cell_gap do
+ for y=0,127+cellvgap,cellvgap do
   bg[x][y]={}
   bg[x][y].p={x,y}
   bg[x][y].r=0
@@ -218,10 +218,10 @@ function _init()
  
  -- stars
  stars={}
- local num_stars=32
- for i=1,sqrt(num_stars) do
- for j=1,sqrt(num_stars) do
-  local c=i*j/num_stars
+ local numvstars=32
+ for i=1,sqrt(numvstars) do
+ for j=1,sqrt(numvstars) do
+  local c=i*j/numvstars
   if c < 0.33 then
    c=15
   elseif c < 0.66 then
@@ -229,9 +229,9 @@ function _init()
   else
    c=7
   end
-  local star=entity((sin(i/sqrt(num_stars))+sin(j/(sqrt(num_stars)+1)))*255,(cos(j/sqrt(num_stars))+cos(i/(sqrt(num_stars)-1)))*255,c)
-  star.p_v=i*j/num_stars*0.9+0.1
-  star.o_p={star.p[1],star.p[2]}
+  local star=entity((sin(i/sqrt(numvstars))+sin(j/(sqrt(numvstars)+1)))*255,(cos(j/sqrt(numvstars))+cos(i/(sqrt(numvstars)-1)))*255,c)
+  star.pvv=i*j/numvstars*0.9+0.1
+  star.ovp={star.p[1],star.p[2]}
   add(stars,star)
  end
  end
@@ -241,56 +241,56 @@ function _init()
  
  -- camera
  cam=entity(0,0)
- cam.p_stack={}
- cam.a_stack={}
- cam.s_stack={}
+ cam.pvstack={}
+ cam.avstack={}
+ cam.svstack={}
  cam.sp={}
  cam.sp[1]=0
  cam.sp[2]=0
- cam.n_stack=1
- add(cam.p_stack,cam.sp)
- add(cam.a_stack,cam.a)
- add(cam.s_stack,cam.s)
+ cam.nvstack=1
+ add(cam.pvstack,cam.sp)
+ add(cam.avstack,cam.a)
+ add(cam.svstack,cam.s)
  
- cam.push = function(_p)
-  add(cam.a_stack,cam.a)
-  add(cam.s_stack,cam.s)
-  local p = v_mul(rotate(_p.p,cam.a),cam.s)
-  cam.s*=_p.s
-  cam.a+=_p.a
-  add(cam.p_stack,cam.sp)
-  cam.sp=v_sub(cam.sp,p)
+ cam.push = function(vp)
+  add(cam.avstack,cam.a)
+  add(cam.svstack,cam.s)
+  local p = vvmul(rotate(vp.p,cam.a),cam.s)
+  cam.s*=vp.s
+  cam.a+=vp.a
+  add(cam.pvstack,cam.sp)
+  cam.sp=vvsub(cam.sp,p)
   camera(cam.p[1]+cam.sp[1],cam.p[2]+cam.sp[2])
-  cam.n_stack+=1
+  cam.nvstack+=1
  end
  
  cam.pop = function()
-  local a=cam.a_stack[cam.n_stack]
-  local s=cam.s_stack[cam.n_stack]
-  local p=cam.p_stack[cam.n_stack]
+  local a=cam.avstack[cam.nvstack]
+  local s=cam.svstack[cam.nvstack]
+  local p=cam.pvstack[cam.nvstack]
   cam.a=a
   cam.s=s
   cam.sp=p
   camera(cam.p[1]+cam.sp[1],cam.p[2]+cam.sp[2])
-  del(cam.a_stack,a)
-  del(cam.s_stack,s)
-  del(cam.p_stack,p)
-  cam.n_stack-=1
+  del(cam.avstack,a)
+  del(cam.svstack,s)
+  del(cam.pvstack,p)
+  cam.nvstack-=1
  end
  
  -- player
  cat=entity(0,0,7)
- cat.nip=initial_nip
+ cat.nip=initialvnip
  cat.nipw1=false
  cat.nipw2=false
  cat.pw=false
- cat.v_a=0
- cat.v_p=0
+ cat.vva=0
+ cat.vvp=0
  cat.s = 0.33
  cat.cell = nil
  cat.talk={}
- cat.draw=function(_c)
-  cam.push(_c)
+ cat.draw=function(vc)
+  cam.push(vc)
   
   --rings
   color(0)
@@ -316,15 +316,15 @@ function _init()
   color(0)
   circfill(0,0,60*cam.s)
   
-  draw_children(_c)
+  drawvchildren(vc)
   
   cam.pop()
  end
  
  
  --head and body
- cat_mesh=vectorize(entity(0,-20,7))
- cat_mesh.points={
+ catvmesh=vectorize(entity(0,-20,7))
+ catvmesh.points={
   {11,-11},
     {-11,-11},
     {-23,-20},
@@ -448,20 +448,20 @@ function _init()
   {14,0}
  }
  
- add(cat.children,cat_mesh)
- add(cat_mesh.children,p2)
- add(cat_mesh.children,p3)
- add(cat_mesh.children,p4)
- add(cat_mesh.children,p5)
- add(cat_mesh.children,p6)
- add(cat_mesh.children,p7)
- add(cat_mesh.children,p8)
- add(cat_mesh.children,p9)
- add(cat_mesh.children,p10)
- add(cat_mesh.children,p11)
- add(cat_mesh.children,p12)
- add(cat_mesh.children,p13)
- add(cat_mesh.children,p14)
+ add(cat.children,catvmesh)
+ add(catvmesh.children,p2)
+ add(catvmesh.children,p3)
+ add(catvmesh.children,p4)
+ add(catvmesh.children,p5)
+ add(catvmesh.children,p6)
+ add(catvmesh.children,p7)
+ add(catvmesh.children,p8)
+ add(catvmesh.children,p9)
+ add(catvmesh.children,p10)
+ add(catvmesh.children,p11)
+ add(catvmesh.children,p12)
+ add(catvmesh.children,p13)
+ add(catvmesh.children,p14)
  
  
  -- palette stuff
@@ -515,12 +515,12 @@ function _init()
  end
  
  
- local saved_palette=dget(1)
+ local savedvpalette=dget(1)
  -- make sure we don't boot with random palette
- if saved_palette==0 or saved_palette==#palette.a then
-  saved_palette=1
+ if savedvpalette==0 or savedvpalette==#palette.a then
+  savedvpalette=1
  end
- palette.set(saved_palette)
+ palette.set(savedvpalette)
  
  -- menu scene
  local menu={}
@@ -555,16 +555,16 @@ function _init()
   
   sspr(96,0,30,30,64-14,64-15)
   color(12)
-  print_ol("\143 \143 in heaven's high \143 \143",9,80,0,12)
+  printvol("\143 \143 in heaven's high \143 \143",9,80,0,12)
   if btn(3) then
-   print_ol("\148 credits",44,90,12,0)
+   printvol("\148 credits",44,90,12,0)
   else
-   print_ol("\148 credits",44,90,0,12)
+   printvol("\148 credits",44,90,0,12)
   end
   if btn(3) then
-   print_ol("\131 play",44,97,12,0)
+   printvol("\131 play",44,97,12,0)
   else
-   print_ol("\131 play",44,97,0,12)
+   printvol("\131 play",44,97,0,12)
   end
   camera(0,menu.o2*127)
   
@@ -579,22 +579,22 @@ function _init()
   line(122,90,122,85)
   
   if btn(3) then
-   print_ol("\131 back",1,-25,12,0)
-   print_ol("\131 start",1,225,12,0)
+   printvol("\131 back",1,-25,12,0)
+   printvol("\131 start",1,225,12,0)
   else
-   print_ol("\131 back",1,-25,0,12)
-   print_ol("\131 start",1,225,0,12)
+   printvol("\131 back",1,-25,0,12)
+   printvol("\131 start",1,225,0,12)
   end
   if btn(2) then
-   print_ol("\148 back",1,132,12,0)
+   printvol("\148 back",1,132,12,0)
   else
-   print_ol("\148 back",1,132,0,12)
+   printvol("\148 back",1,132,0,12)
   end
   
   color(12)
   sspr(80,0,16,16,56,-100)
-  print_ol("strung out on heaven's high\nwas made by sean & ian\nfor a game by its cover (#agbic)\nbased on a famicase entry\nby daruma studio",1,-72,0,12)
-  print_ol("\nyou are the action cat\n\nhow to play:\n\n \139+\145: turn\n \148+\131: move\nz or x: interact\n\nfind nip to keep the trip going\nuse satellites as landmarks\ncollect photos of the past",1,142,0,12)
+  printvol("strung out on heaven's high\nwas made by sean & ian\nfor a game by its cover (#agbic)\nbased on a famicase entry\nby daruma studio",1,-72,0,12)
+  printvol("\nyou are the action cat\n\nhow to play:\n\n \139+\145: turn\n \148+\131: move\nz or x: interact\n\nfind nip to keep the trip going\nuse satellites as landmarks\ncollect photos of the past",1,142,0,12)
   sspr(16*2,0,16,16,40,216)
   sspr(16*3,0,16,16,56,216)
   sspr(16*4,16,16,16,72,216)
@@ -717,13 +717,13 @@ function _init()
  game.u=function()
  
   -- input
-  if btn(0) then cat.v_a += a_speed end
-  if btn(1) then cat.v_a -= a_speed end
-  if btn(2) then cat.v_p -= p_speed end
-  if btn(3) then cat.v_p += p_speed/3 end
+  if btn(0) then cat.vva += avspeed end
+  if btn(1) then cat.vva -= avspeed end
+  if btn(2) then cat.vvp -= pvspeed end
+  if btn(3) then cat.vvp += pvspeed/3 end
   
   --catnip
-  cat.nip -= nip_drain
+  cat.nip -= nipvdrain
   
   cat.nip=min(cat.nip,10)
   
@@ -754,7 +754,7 @@ function _init()
   
   if btnp(4) or btnp(5) then
    if cat.cell != nil then
-    cell_interact(cat.cell)
+    cellvinteract(cat.cell)
    end
   end
   
@@ -808,15 +808,15 @@ function _init()
   
   --pulses
   for p in all(pulses) do
-   if time()-pulse_time > p.o then
-    p.p=v_lerp(p.p,p.t,0.1/cell_space)
+   if time()-pulsevtime > p.o then
+    p.p=vvlerp(p.p,p.t,0.1/cellvspace)
    end
   end
   
   -- parts
   for p in all(parts) do
-   p.d = v_mul(p.d,0.95)
-   p.p = v_add(p.p,p.d)
+   p.d = vvmul(p.d,0.95)
+   p.p = vvadd(p.p,p.d)
    p.s *= 0.95
    if p.s < 0.1 then
     del(parts,p)
@@ -824,72 +824,72 @@ function _init()
   end
   
   -- player
-  cat.v_a *= 0.7
-  cat.v_p *= 0.9
+  cat.vva *= 0.7
+  cat.vvp *= 0.9
   
-  cat.a += cat.v_a
+  cat.a += cat.vva
   
   local ca=cos(cat.a-0.25)
   local sa=sin(cat.a-0.25)
-  cat.p[1] += ca*cat.v_p
-  cat.p[2] += sa*cat.v_p
+  cat.p[1] += ca*cat.vvp
+  cat.p[2] += sa*cat.vvp
   
-  cat_mesh.s=1+sin(time())/10
+  catvmesh.s=1+sin(time())/10
   
   local d={cam.p[1],cam.p[2]}
-  cam.p = v_lerp(cam.p, v_add(cat.p,{ca*-32,sa*-32}), 0.1)
+  cam.p = vvlerp(cam.p, vvadd(cat.p,{ca*-32,sa*-32}), 0.1)
   
   cam.p[1] = lerp(cam.p[1], cat.p[1], 0.1)
   cam.p[2] = lerp(cam.p[2], cat.p[2], 0.1)
-  d = v_sub(cam.p,d)
+  d = vvsub(cam.p,d)
   
   -- stars
   for star in all(stars) do
-   star.o_p[1]=star.p[1]
-   star.o_p[2]=star.p[2]
-   star.p[1] -= d[1]*star.p_v
-   star.p[2] -= d[2]*star.p_v
+   star.ovp[1]=star.p[1]
+   star.ovp[2]=star.p[2]
+   star.p[1] -= d[1]*star.pvv
+   star.p[2] -= d[2]*star.pvv
    
    if star.p[1] > 255 then
     star.p[1] -= 255
-    star.o_p[1] -= 255
+    star.ovp[1] -= 255
    elseif star.p[1] < 0 then
     star.p[1] += 255
-    star.o_p[1] += 255
+    star.ovp[1] += 255
    end
    if star.p[2] > 255 then
     star.p[2] -= 255
-    star.o_p[2] -= 255
+    star.ovp[2] -= 255
    elseif star.p[2] < 0 then
     star.p[2] += 255
-    star.o_p[2] += 255
+    star.ovp[2] += 255
    end
   end
   
   -- bg
   local rmin=6
   local cmin=nil
-  d=v_sub(cat.p,cam.p)
-  for a=0,127+cell_gap,cell_gap do
-  for b=0,127+cell_gap,cell_gap do
+  d=vvsub(cat.p,cam.p)
+  for a=0,127+cellvgap,cellvgap do
+  for b=0,127+cellvgap,cellvgap do
    -- get offset for camera
    -- and distortion
    local p=bg[a][b]
-   p.p[1]=a-cam.p[1]%cell_gap
-   p.p[2]=b-cam.p[2]%cell_gap
-   local t = abs(d[1]-p.p[1]+64-cell_gap_h)
-   local s = abs(d[2]-p.p[2]+64-cell_gap_h)
+   p.p[1]=a-cam.p[1]%cellvgap
+   p.p[2]=b-cam.p[2]%cellvgap
+   local t = abs(d[1]-p.p[1]+64-cellvgapvh)
+   local s = abs(d[2]-p.p[2]+64-cellvgapvh)
    p.r = sqrt(s+t)
    p.a = atan2(t,s)
    
-   t=flr((a+cam.p[1])/cell_gap)/cell_space
-   s=flr((b+cam.p[2])/cell_gap)/cell_space
+   t=flr((a+cam.p[1])/cellvgap)/cellvspace
+   s=flr((b+cam.p[2])/cellvgap)/cellvspace
    
    -- check for actual cells
    if t%1==0 and
       s%1 == 0 and
-      t == mid(-map_size,t,map_size) and 
-      s == mid(-map_size,s,map_size) 
+      t == mid(-mapvsize,t,mapvsize) and 
+      s == mid(-mapvsize,s,mapvsize) 
    then
     p.cell = cells
     [flr(t)]
@@ -905,17 +905,17 @@ function _init()
    end
    
    -- distort based on speed
-   p.r = p.r/8*cat.v_p*cat.nip/5
+   p.r = p.r/8*cat.vvp*cat.nip/5
   end
   end
   
   cat.cell=cmin
   
   -- out of bounds warning
-  if cat.p[1]+64 < -(map_size+1)*cell_full
-  or cat.p[2]+64 < -(map_size+1)*cell_full
-  or cat.p[1]+64 > (map_size+1)*cell_full
-  or cat.p[2]+64 > (map_size+1)*cell_full then
+  if cat.p[1]+64 < -(mapvsize+1)*cellvfull
+  or cat.p[2]+64 < -(mapvsize+1)*cellvfull
+  or cat.p[1]+64 > (mapvsize+1)*cellvfull
+  or cat.p[2]+64 > (mapvsize+1)*cellvfull then
    if not cat.pw then
     cat.pw=true
     say(interactions.cat,"nothing out this way - i should head back.")
@@ -950,8 +950,8 @@ function _init()
    end
   end
   
-  draw_bg()
-  draw_stars()
+  drawvbg()
+  drawvstars()
   
   o=entity(64,64)
   cam.push(o)
@@ -960,8 +960,8 @@ function _init()
   
   cam.pop()
   
-  draw_icons()
-  draw_pulses()
+  drawvicons()
+  drawvpulses()
   
   if cat.nip < 2.1 then
    camera(0,0)
@@ -981,9 +981,9 @@ function _init()
    p.draw(p)
   end
   
-  draw_talk()
+  drawvtalk()
  
-  --draw_debug() 
+  --drawvdebug() 
  end
  
  scenes["menu"]=menu
@@ -1023,38 +1023,38 @@ function say(i,s)
  cat.talk.time=time() 
 end
 
-function cell_interact(cell)
+function cellvinteract(cell)
  if cell.icon == interactions.empty then
   --empty cell
  elseif cell.icon == interactions.nip then
-  cat.nip+=nip_gain
+  cat.nip+=nipvgain
   game.details.bad+=1
   cam.p[1] += rnd(15)-rnd(15)
   cam.p[2] += rnd(15)-rnd(15)
   
-  add_pop()
+  addvpop()
   
   say(cell.icon,"found some space catnip!")
-  nip_drain+=nip_drain_build
+  nipvdrain+=nipvdrainvbuild
   cell.icon=interactions.empty
  elseif cell.icon == interactions.photo then
   game.details.blue+=1
   cam.p[1] += rnd(15)-rnd(15)
   cam.p[2] += rnd(15)-rnd(15)
   
-  add_pop()
+  addvpop()
   
   say(cell.icon,cell.interact.txt)
   cell.icon=interactions.empty
  elseif cell.icon == interactions.sat then
   if not cell.used then
-   pulse_time=time()
+   pulsevtime=time()
    game.details.good+=1
   end
   local i=0
   local num=0
-  for s=max(-map_size,cell.x-2),min(map_size,cell.x+2) do
-  for t=max(-map_size,cell.y-2),min(map_size,cell.y+2) do
+  for s=max(-mapvsize,cell.x-2),min(mapvsize,cell.x+2) do
+  for t=max(-mapvsize,cell.y-2),min(mapvsize,cell.y+2) do
    i+=1
    if cells[s][t].icon == interactions.sat then
     if cells[s][t] != cell then
@@ -1089,7 +1089,7 @@ function cell_interact(cell)
  cell.used = true
 end
 
-function add_pop()
+function addvpop()
  for i=0,1,0.05 do 
   local p=entity(cat.p[1]+25*cos(i)+64,cat.p[2]+25*sin(i)+64,12)
   p.d={rnd(5)*cos(i),rnd(5)*sin(i)}
@@ -1109,26 +1109,26 @@ function _draw()
  scenes[scenes.current].d()
 end
 
-function draw_debug()
+function drawvdebug()
  camera(0,0)
- print_ol("cam.x:"..cam.p[1],1,1,0,7)
- print_ol("cam.y:"..cam.p[2],60,1,0,7)
- print_ol("cat.x:"..cat.p[1],1,10,0,7)
- print_ol("cat.y:"..cat.p[2],60,10,0,7)
- print_ol("mem:"..stat(0),1,120,0,7)
- print_ol("cpu:"..stat(1),60,120,0,7)
+ printvol("cam.x:"..cam.p[1],1,1,0,7)
+ printvol("cam.y:"..cam.p[2],60,1,0,7)
+ printvol("cat.x:"..cat.p[1],1,10,0,7)
+ printvol("cat.y:"..cat.p[2],60,10,0,7)
+ printvol("mem:"..stat(0),1,120,0,7)
+ printvol("cpu:"..stat(1),60,120,0,7)
   
- print_ol("nip:"..cat.nip,1,20,0,7)
- print_ol("good:"..game.details.good,1,30,0,7)
- print_ol("bad: "..game.details.bad,1,40,0,7)
- print_ol("blue:"..game.details.blue,1,50,0,7)
+ printvol("nip:"..cat.nip,1,20,0,7)
+ printvol("good:"..game.details.good,1,30,0,7)
+ printvol("bad: "..game.details.bad,1,40,0,7)
+ printvol("blue:"..game.details.blue,1,50,0,7)
 end
 
-function draw_bg()
+function drawvbg()
  camera(0,0)
  color(15)
- for a=0,127+cell_gap,cell_gap do
- for b=0,127+cell_gap,cell_gap do
+ for a=0,127+cellvgap,cellvgap do
+ for b=0,127+cellvgap,cellvgap do
   local s=bg[a][b]
   local x=s.p[1]+cos(s.a)*s.r
   local y=s.p[2]+sin(s.a)*s.r
@@ -1138,11 +1138,11 @@ function draw_bg()
  end
 end
 
-function draw_icons()
+function drawvicons()
  camera(0,0)
  color(15)
- for a=0,127+cell_gap,cell_gap do
- for b=0,127+cell_gap,cell_gap do
+ for a=0,127+cellvgap,cellvgap do
+ for b=0,127+cellvgap,cellvgap do
   local s=bg[a][b]
   local x=s.p[1]+cos(s.a)*s.r
   local y=s.p[2]+sin(s.a)*s.r
@@ -1151,56 +1151,56 @@ function draw_icons()
    -- selected cell
    if s.cell == cat.cell then
     pal(7,palette.a[palette.c][4])
-    for c=x+cell_gap_h-1-8,x+cell_gap_h+1-8 do
-    for d=y+cell_gap_h-1-8,y+cell_gap_h+1-8 do
-     draw_icon(s.cell.icon,c,d)
+    for c=x+cellvgapvh-1-8,x+cellvgapvh+1-8 do
+    for d=y+cellvgapvh-1-8,y+cellvgapvh+1-8 do
+     drawvicon(s.cell.icon,c,d)
     end
     end
     pal(7,palette.a[palette.c][3])
    end
    
-   draw_icon(s.cell.icon,x+cell_gap_h-8,y+cell_gap_h-8)
+   drawvicon(s.cell.icon,x+cellvgapvh-8,y+cellvgapvh-8)
   end
  end
  end
 end
 
-function draw_icon(i,x,y)
+function drawvicon(i,x,y)
  sspr(16*(i%6),flr(i/6)*16,16,16,x,y)
 end
 
-function draw_stars()
+function drawvstars()
  camera(0,0)
  for star in all(stars) do
   color(star.c)
   circ(star.p[1],star.p[2],1)
-  line(star.p[1],star.p[2],star.o_p[1],star.o_p[2])
+  line(star.p[1],star.p[2],star.ovp[1],star.ovp[2])
  end
 end
 
-function draw_pulses()
+function drawvpulses()
  camera(cam.p[1],cam.p[2])
  color(12)
  for p in all(pulses) do
-  line(p.s[1]*cell_full+cell_gap_h,p.s[2]*cell_full+cell_gap_h,
-  p.p[1]*cell_full+cell_gap_h,p.p[2]*cell_full+cell_gap_h)
+  line(p.s[1]*cellvfull+cellvgapvh,p.s[2]*cellvfull+cellvgapvh,
+  p.p[1]*cellvfull+cellvgapvh,p.p[2]*cellvfull+cellvgapvh)
  end
  color(7)
  for p in all(pulses) do
-  circfill(p.p[1]*cell_full+cell_gap_h,p.p[2]*cell_full+cell_gap_h,2)
+  circfill(p.p[1]*cellvfull+cellvgapvh,p.p[2]*cellvfull+cellvgapvh,2)
  end
  color(12)
  for p in all(pulses) do
-  circ(p.p[1]*cell_full+cell_gap_h,p.p[2]*cell_full+cell_gap_h,2)
+  circ(p.p[1]*cellvfull+cellvgapvh,p.p[2]*cellvfull+cellvgapvh,2)
  end
 end
 
-function draw_talk()
+function drawvtalk()
  camera(0,0)
  if cat.talk.txt2!=nil then
   color(0)
   rectfill(0,103,127,127)
-  draw_icon(cat.talk.icon,0,108)
+  drawvicon(cat.talk.icon,0,108)
   color(7)
   local y = 113-(cat.talk.h)*3
   print(cat.talk.txt2,26,y)
@@ -1209,39 +1209,39 @@ function draw_talk()
  end
 end
 
-function draw_children(_c)
- for c in all(_c.children) do
+function drawvchildren(vc)
+ for c in all(vc.children) do
   c.draw(c)
  end
 end
 
-function draw_vector(_p)
- cam.push(_p)
+function drawvvector(vp)
+ cam.push(vp)
  
- color(_p.c)
- p1 = v_mul(rotate(_p.points[1],cam.a),cam.s)
- for i=2,#_p.points do
-  p2 = v_mul(rotate(_p.points[i],cam.a),cam.s)
+ color(vp.c)
+ p1 = vvmul(rotate(vp.points[1],cam.a),cam.s)
+ for i=2,#vp.points do
+  p2 = vvmul(rotate(vp.points[i],cam.a),cam.s)
   
   line(p1[1],p1[2],p2[1],p2[2])
   
   p1 = p2
  end
  
- draw_children(_p)
+ drawvchildren(vp)
  
  cam.pop()
 end
 
-function print_ol(_s,_x,_y,_c1,_c2)
- color(_c1)
- for x=_x-1,_x+1 do
- for y=_y-1,_y+1 do
-  print(_s,x,y)
+function printvol(vs,vx,vy,vc1,vc2)
+ color(vc1)
+ for x=vx-1,vx+1 do
+ for y=vy-1,vy+1 do
+  print(vs,x,y)
  end
  end
- color(_c2)
- print(_s,_x,_y)
+ color(vc2)
+ print(vs,vx,vy)
 end
 __gfx__
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ccccc0ccccccccc0ccccc0000000
